@@ -6,8 +6,8 @@
     "esModuleInterop": true,
     "lib": ["ES2020", "DOM", "DOM.Iterable"],
     "skipLibCheck": true,
-    "outDir": "./dist",
     "rootDir": "./src",
+    "outDir": "./dist",
 
     /* Bundler mode */
     "moduleResolution": "Node",
@@ -19,6 +19,8 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true
-  },
-  "include": ["src/server.ts"]
+  }, 
+  "include": ["src"]
 }
+
+
