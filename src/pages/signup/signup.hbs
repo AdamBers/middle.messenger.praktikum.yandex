@@ -1,0 +1,16 @@
+<div class="signup-container">
+   {{> PageTitle title="Регистрация"}}
+   <form>
+      {{> Input label-for="first_name" label-text="Имя" type="text" id="first_name" name = "first_name"}}
+      {{> Input label-for="second_name" label-text="Фамилия" type="text" id="second_name" name = "second_name"}}
+      {{> Input label-for="login" label-text="Логин" type="text" id="login" name = "login"}}
+      {{> Input label-for="email" label-text="Email" type="text" id="email" name = "email"}}
+      {{> Input label-for="password" label-text="Пароль" type="text" id="password" name = "password"}}
+      {{> Input label-for="confirm_password" label-text="Подтверждение пароля" type="text" id="confirm_password" name = "confirm_password"}}
+      {{> Input label-for="phone" label-text="Телефон" type="text" id="phone" name = "phone"}}
+      {{> Button type="submit" text="Sign Up"}}
+    </form>
+   <p>Уже зарегистрированы? 
+      {{> Link href="/login" page="login" text="Войти"}}
+   </p>
+</div>
