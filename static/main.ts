@@ -1,7 +1,7 @@
 import Handlebars from "handlebars";
 import * as Components from "../src/components";
 import * as Pages from "../src/pages";
-import "./style.scss"
+import "./style.scss";
 
 const app = document.getElementById("app");
 
@@ -32,11 +32,11 @@ if (app) {
   document.addEventListener("DOMContentLoaded", () => navigate("/"));
 
   document.addEventListener("click", (e) => {
-    e.preventDefault();
-    e.stopImmediatePropagation();
     const target = e.target as HTMLElement;
     const page = target?.getAttribute("page");
     if (page) {
+      e.preventDefault();
+      e.stopImmediatePropagation();
       navigate(page);
     }
   });
