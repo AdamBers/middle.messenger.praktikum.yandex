@@ -1,0 +1,10 @@
+<div class="login-container">
+  {{> PageTitle title="Вход"}}
+  <form>
+    {{> Input label="Логин" type="text" id="login" name="login" label-for="login" label-text="Логин" }}
+    {{> Input label="Пароль" type="text" id="password" name="password" label-for="password" label-text="Пароль"}}
+    {{> Button type="submit" text="Войти"}}
+  </form>
+  <p>Нет аккаунта?</p>
+  {{> Link href="/signup" page="signup" text="Создать"}}
+  </div>
