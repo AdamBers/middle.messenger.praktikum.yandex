@@ -1,6 +1,6 @@
 type Callback = (...args: any[]) => void;
 
-class EventBus {
+export default class EventBus {
   private listeners: Record<string, Callback[]> = {};
 
   on(event: string, callback: Callback): void {

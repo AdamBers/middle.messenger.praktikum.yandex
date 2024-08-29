@@ -3,41 +3,50 @@ import * as Components from "../src/components";
 import * as Pages from "../src/pages";
 import "./style.scss";
 
-const app = document.getElementById("app");
+declare global {
+  export type Keys<T extends Record<string, unknown>> = keyof T;
+  export type Values<T extends Record<string, unknown>> = T[Keys<T>];
+}
 
-if (app) {
-  const pages = {
-    "/": [Pages.HomePage],
-    login: [Pages.LoginPage],
-    signup: [Pages.SignupPage],
-    chatList: [Pages.ChatListPage],
-    chatItem: [Pages.ChatItemPage],
-    userSettings: [Pages.UserSettingsPage],
-    404: [Pages.NotFoundPage],
-    500: [Pages.ServerErrorPage],
-  };
+const pages = {
+  login: [Pages.LoginPage],
+  signup: [Pages.SignupPage],
+  home: [Pages.HomePage],
+  chatlist: [Pages.HomePage],
+  chatitem: [Pages.HomePage],
+  usersettings: [Pages.HomePage],
+  404: [Pages.NotFoundPage],
+  500: [Pages.ServerErrorPage],
+};
 
-  Object.entries(Components).forEach(([name, component]) => {
-    Handlebars.registerPartial(name, component);
-  });
+// Object.entries(Components).forEach(([name, component]) => {
+//   Handlebars.registerPartial(name, component);
+// });
 
-  function navigate(page: string) {
-    const [source, args] = pages[page];
-    const handlebarsFunct = Handlebars.compile(source);
-    if (app) {
-      app.innerHTML = handlebarsFunct(args);
-    }
+function navigate(page: string) {
+  //@ts-ignore
+  const [source, context] = pages[page];
+  const container = document.getElementById("app")!;
+
+  if (source instanceof Object) {
+    const page = new source(context);
+    container.innerHTML = "";
+    container.append(page.getContent());
+    // page.dispatchComponentDidMount();
+    return;
   }
 
-  document.addEventListener("DOMContentLoaded", () => navigate("/"));
-
-  document.addEventListener("click", (e) => {
-    const target = e.target as HTMLElement;
-    const page = target?.getAttribute("page");
-    if (page) {
-      e.preventDefault();
-      e.stopImmediatePropagation();
-      navigate(page);
-    }
-  });
+  container.innerHTML = Handlebars.compile(source)(context);
 }
+
+document.addEventListener("DOMContentLoaded", () => navigate("home"));
+
+document.addEventListener("click", (e) => {
+  //@ts-ignore
+  const page = e.target.getAttribute("page");
+  e.preventDefault();
+  if (page) {
+    navigate(page);
+    e.stopImmediatePropagation();
+  }
+});
