@@ -62,7 +62,7 @@ class SignupPage extends Block {
       ButtonSignUp: new Button({
         label: "Sign Up",
         type: "submit",
-        // onClick: (event: Event) => this.handleSubmit(event),
+        onClick: (e: Event) => this.handleSubmit(e),
       }),
       LoginLink: new Link({
         url: "/login",
@@ -70,6 +70,43 @@ class SignupPage extends Block {
         page: "login",
       }),
     });
+  }
+  handleSubmit(e: Event) {
+    e.preventDefault();
+    const childrenToCheck = [
+      this.children.InputFirstName,
+      this.children.InputSecondName,
+      this.children.InputLogin,
+      this.children.InputEmail,
+      this.children.InputPassword,
+      this.children.InputPhone,
+    ];
+
+    let areAllValid = true;
+    const userData: { [key: string]: string } = {};
+
+    for (const child of childrenToCheck) {
+      // Вызов handleBlur для валидации поля
+      child.handleBlur();
+
+      // Получаем значение поля
+      const value = child.children.InputField.getContent().value;
+
+      // Если поле не заполнено, устанавливаем флаг areAllValid в false
+      if (!value || value === "") {
+        areAllValid = false;
+      } else {
+        // Сохраняем значение поля в объект userData
+        userData[child.props.name] = value;
+      }
+    }
+
+    if (areAllValid) {
+      console.log("Все поля заполнены верно.");
+      console.log("Введенные данные:", userData);
+    } else {
+      console.log("Не все поля заполнены верно.");
+    }
   }
   render() {
     return `

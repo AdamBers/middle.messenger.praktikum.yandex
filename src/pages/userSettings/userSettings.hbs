@@ -4,20 +4,20 @@
    </div>
    <div class="content">
       <form>      
-            <label for="avatar">
-               {{#if avatar}}
-                  {{!-- <img class="profile__avatar" src="{{ avatar }}" alt="avatar" /> --}}
-               {{else }}
-                  <div class="profile__avatar-empty">
-                     {{!-- <img class="profile__avatar" src="/static/img/empty-profile.png" alt="avatar" /> --}}
-                  </div>
-               {{/if}}
-            </label>
-            <input type="file" id="avatar" name="avatar" accept="image/png, image/jpeg" class="avatar_input">
+         <label for="avatar">
+            {{#if avatar}}
+               {{!-- <img class="profile__avatar" src="{{ avatar }}" alt="avatar" /> --}}
+            {{else }}
+               <div class="profile__avatar-empty">
+                  {{!-- <img class="profile__avatar" src="/static/img/empty-profile.png" alt="avatar" /> --}}
+               </div>
+            {{/if}}
+         </label>
+         <input type="file" id="avatar" name="avatar" accept="image/png, image/jpeg" class="avatar_input">
          
          
       
-      <div class="user-name">Имя</div>
+         <div class="user-name">Имя</div>
          {{> Input label="email" type="text" id="email" name="email" label-for="email" label-text="Почта" }}
          {{> Input label="login" type="text" id="login" name="login" label-for="login" label-text="Логин" }}
          {{> Input label="first_name" type="text" id="first_name" name="first_name" label-for="first_name" label-text="Имя" }}

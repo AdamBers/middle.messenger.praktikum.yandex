@@ -17,7 +17,6 @@ export function validateName(name: string): boolean {
  */
 export function validateLogin(login: string): boolean {
   const loginRegex = /^(?!\d+$)[a-zA-Z0-9_-]{3,20}$/;
-  console.log(loginRegex.test(login));
   return loginRegex.test(login);
 }
 
@@ -38,7 +37,6 @@ export function validateEmail(email: string): boolean {
  */
 export function validatePassword(password: string): boolean {
   const passwordRegex = /^(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{8,40}$/;
-  console.log(passwordRegex.test(password));
   return passwordRegex.test(password);
 }
 

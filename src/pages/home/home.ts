@@ -16,20 +16,14 @@ class HomePage extends Block {
       page: "signup",
     });
 
-    const ChatListPage = new Link({
-      url: "/chat-list",
-      text: "Список чатов",
-      page: "chat-list",
-    });
-
-    const ChatItemPage = new Link({
-      url: "/chat-item",
+    const ChatPage = new Link({
+      url: "/chat",
       text: "Чат",
-      page: "chat-item",
+      page: "chat",
     });
 
     const UserSettingsPage = new Link({
-      url: "/user-settings",
+      url: "/settings",
       text: "Настройки",
       page: "settings",
     });
@@ -49,8 +43,7 @@ class HomePage extends Block {
       TitleOfPage,
       LoginPage,
       SignupPage,
-      ChatListPage,
-      ChatItemPage,
+      ChatPage,
       UserSettingsPage,
       NotFoundPage,
       ServerErrorPage,
@@ -61,10 +54,9 @@ class HomePage extends Block {
           <nav class="navigation">
             {{{ TitleOfPage }}}
             <ul>
+              <li>{{{ChatPage}}}</li>
               <li>{{{LoginPage}}}</li>
               <li>{{{SignupPage}}}</li>
-              <li>{{{ChatListPage}}}</li>
-              <li>{{{ChatItemPage}}}</li>
               <li>{{{UserSettingsPage}}}</li>
               <li>{{{NotFoundPage}}}</li>
               <li>{{{ServerErrorPage}}}</li>

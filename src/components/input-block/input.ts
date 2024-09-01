@@ -12,11 +12,13 @@ class Input extends Block {
     });
   }
   render(): string {
-    return `
-      <input
+    return `<input
         class="input__element"
-        type="{{type}}"
+        type="{{type}}" 
         placeholder="{{placeholder}}"
+        id="{{id}}" 
+        name="{{name}}" 
+        accept="{{accept}}" 
       />
    `;
   }

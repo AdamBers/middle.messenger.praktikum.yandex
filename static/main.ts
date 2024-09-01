@@ -12,9 +12,8 @@ const pages = {
   login: [Pages.LoginPage],
   signup: [Pages.SignupPage],
   home: [Pages.HomePage],
-  chatlist: [Pages.HomePage],
-  chatitem: [Pages.HomePage],
-  usersettings: [Pages.HomePage],
+  chat: [Pages.ChatPage],
+  settings: [Pages.UserSettingsPage],
   404: [Pages.NotFoundPage],
   500: [Pages.ServerErrorPage],
 };
@@ -44,8 +43,9 @@ document.addEventListener("DOMContentLoaded", () => navigate("home"));
 document.addEventListener("click", (e) => {
   //@ts-ignore
   const page = e.target.getAttribute("page");
-  e.preventDefault();
+  
   if (page) {
+    e.preventDefault();
     navigate(page);
     e.stopImmediatePropagation();
   }
