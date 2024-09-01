@@ -15,7 +15,12 @@ class ChatMessages extends Block {
       OutgoingMessage: new OutgoingMessage({
         message: "Круто",
       }),
-      InputMessage: new Input({ type: "text", placeholder: "Сообщение" }),
+      InputMessage: new Input({
+        type: "text",
+        placeholder: "Сообщение",
+        name: "message",
+        id: "message",
+      }),
       InputFile: new Input({
         type: "file",
         placeholder: "",
@@ -32,7 +37,7 @@ class ChatMessages extends Block {
   handleSubmit(e: Event) {
     e.preventDefault();
     if (!this.children.InputMessage.getContent().value) {
-      console.log("Поле не должно быть пустым");
+      console.log("Поле ввода не должно быть пустым");
     }
   }
   render(): string {

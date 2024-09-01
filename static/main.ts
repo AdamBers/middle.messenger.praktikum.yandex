@@ -1,5 +1,4 @@
 import Handlebars from "handlebars";
-import * as Components from "../src/components";
 import * as Pages from "../src/pages";
 import "./style.scss";
 
@@ -11,7 +10,7 @@ declare global {
 const pages = {
   login: [Pages.LoginPage],
   signup: [Pages.SignupPage],
-  home: [Pages.HomePage],
+  "/": [Pages.HomePage],
   chat: [Pages.ChatPage],
   settings: [Pages.UserSettingsPage],
   404: [Pages.NotFoundPage],
@@ -38,12 +37,12 @@ function navigate(page: string) {
   container.innerHTML = Handlebars.compile(source)(context);
 }
 
-document.addEventListener("DOMContentLoaded", () => navigate("home"));
+document.addEventListener("DOMContentLoaded", () => navigate("/"));
 
 document.addEventListener("click", (e) => {
   //@ts-ignore
   const page = e.target.getAttribute("page");
-  
+
   if (page) {
     e.preventDefault();
     navigate(page);
