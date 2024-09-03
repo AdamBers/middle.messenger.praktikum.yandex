@@ -1,13 +1,15 @@
 import Block from "../../core/Block";
 
-class Link extends Block {
-  constructor(props) {
-    super({
-      ...props,
-      events: {
-        click: props.onClick,
-      },
-    });
+interface LinkProps {
+  url: string;
+  text: string;
+  page?: string;
+  className?: string;
+}
+
+class Link extends Block<LinkProps> {
+  constructor(props: LinkProps) {
+    super(props);
   }
   render(): string {
     return `

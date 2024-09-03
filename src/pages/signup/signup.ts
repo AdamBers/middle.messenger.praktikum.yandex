@@ -1,8 +1,9 @@
 import { PageTitle, InputBlock, Button, Link } from "../../components";
 import Block from "../../core/Block";
 
-class SignupPage extends Block {
-  constructor(props) {
+interface ISignupPage {}
+class SignupPage extends Block<ISignupPage> {
+  constructor(props: ISignupPage) {
     super({
       ...props,
       TitleOfPage: new PageTitle({
@@ -10,18 +11,23 @@ class SignupPage extends Block {
       }),
 
       InputFirstName: new InputBlock({
-        label_text: "Имя",
-        type: "text",
         id: "first_name",
         name: "first_name",
+        type: "text",
+        label_text: "Имя",
+        label: "Имя",
+        label_for: "first_name",
+        placeholder: "",
       }),
 
       InputSecondName: new InputBlock({
         label_for: "second_name",
         label_text: "Фамилия",
+        label: "",
         type: "text",
         id: "second_name",
         name: "second_name",
+        placeholder: "",
       }),
 
       InputLogin: new InputBlock({
@@ -37,9 +43,11 @@ class SignupPage extends Block {
       InputEmail: new InputBlock({
         label_for: "email",
         label_text: "Email",
+        label: "",
         type: "text",
         id: "email",
         name: "email",
+        placeholder: "",
       }),
 
       InputPassword: new InputBlock({
@@ -49,18 +57,21 @@ class SignupPage extends Block {
         label_for: "password",
         label_text: "Пароль",
         label: "Пароль",
+        placeholder: "",
       }),
 
       InputPhone: new InputBlock({
         label_for: "phone",
         label_text: "Телефон",
+        label: "",
         type: "text",
         id: "phone",
         name: "phone",
+        placeholder: "",
       }),
 
       ButtonSignUp: new Button({
-        label: "Sign Up",
+        button_text: "Sign Up",
         type: "submit",
         onClick: (e: Event) => this.handleSubmit(e),
       }),

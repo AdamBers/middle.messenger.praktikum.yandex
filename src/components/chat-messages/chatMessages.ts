@@ -1,11 +1,19 @@
 import Block from "../../core/Block";
-import { Input } from "../input-block";
+import { InputElement } from "../input-block";
 import { IncomingMessage } from "../incoming-message";
 import { OutgoingMessage } from "../outgoing-message";
 import { Button } from "../button";
 
-class ChatMessages extends Block {
-  constructor(props) {
+type ChatMessagesProps = {};
+type ChatMessagesChildren = {
+  IncomingMessage: IncomingMessage;
+  OutgoingMessage: OutgoingMessage;
+  InputMessage: InputElement;
+  InputFile: InputElement;
+  Button: Button;
+};
+class ChatMessages extends Block<ChatMessagesProps, ChatMessagesChildren> {
+  constructor(props: ChatMessagesProps) {
     super({
       ...props,
       IncomingMessage: new IncomingMessage({
@@ -15,15 +23,16 @@ class ChatMessages extends Block {
       OutgoingMessage: new OutgoingMessage({
         message: "Круто",
       }),
-      InputMessage: new Input({
+      InputMessage: new InputElement({
         type: "text",
         placeholder: "Сообщение",
         name: "message",
         id: "message",
       }),
-      InputFile: new Input({
+      InputFile: new InputElement({
         type: "file",
         placeholder: "",
+        name: "add_file",
         id: "file",
         accept: "image/png, image/jpeg",
       }),
@@ -36,10 +45,13 @@ class ChatMessages extends Block {
 
   handleSubmit(e: Event) {
     e.preventDefault();
-    if (!this.children.InputMessage.getContent().value) {
+    const inputElement =
+      this.children.InputMessage.getContent() as HTMLInputElement;
+    if (!inputElement?.value) {
       console.log("Поле ввода не должно быть пустым");
     }
   }
+
   render(): string {
     return `
          <div class="chat-messages">

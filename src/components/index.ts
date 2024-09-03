@@ -3,7 +3,7 @@ export { ChatItem } from "./chat-item";
 export { ChatList } from "./chat-list";
 export { Dialog } from "./dialog";
 export { InputBlock } from "./input-block";
-export { Input } from "./input-block";
+export { InputElement } from "./input-block";
 export { Link } from "./link";
 export { PageTitle } from "./page-title";
 export { ChatMessages } from "./chat-messages";

@@ -1,8 +1,10 @@
 import Block from "../../core/Block";
 import { ChatItem } from "../chat-item";
 
-class ChatList extends Block {
-  constructor(props) {
+type ChatListProps = {};
+
+class ChatList extends Block<ChatListProps> {
+  constructor(props: ChatListProps) {
     super({
       ...props,
       chat1: new ChatItem({

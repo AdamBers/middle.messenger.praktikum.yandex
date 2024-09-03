@@ -1,7 +1,13 @@
 import Block from "../../core/Block";
 
+type ButtonProps = {
+  button_text?: string;
+  type: string;
+  onClick: (e: Event) => void;
+};
+
 class Button extends Block {
-  constructor(props) {
+  constructor(props: ButtonProps) {
     super({
       ...props,
       events: {
@@ -13,7 +19,7 @@ class Button extends Block {
   render(): string {
     return `
       <button class="button" type={{type}}>
-         {{label}}
+         {{button_text}}
       </button>
     `;
   }

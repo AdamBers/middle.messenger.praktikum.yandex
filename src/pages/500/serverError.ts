@@ -1,8 +1,10 @@
 import { PageTitle, Link } from "../../components";
 import Block from "../../core/Block";
 
-class ServerErrorPage extends Block {
-  constructor(props) {
+interface IServerErrorPage {}
+
+class ServerErrorPage extends Block<IServerErrorPage> {
+  constructor(props: IServerErrorPage) {
     super({
       ...props,
       TitleOfPage: new PageTitle({ title: "500" }),
@@ -22,4 +24,3 @@ class ServerErrorPage extends Block {
 
 export default ServerErrorPage;
 
-// {{> Link href="/" text="Назад к чатам" page="/"}}

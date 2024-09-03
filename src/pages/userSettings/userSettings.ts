@@ -1,18 +1,19 @@
 import { InputBlock, Button, Link } from "../../components";
 import Block from "../../core/Block";
-// import { validateLogin, validatePassword } from "../../utils/validation";
 
-class UserSettingsPage extends Block {
-  constructor(props) {
+interface UserSettingsPage {}
+class UserSettingsPage extends Block<UserSettingsPage> {
+  constructor(props: UserSettingsPage) {
     super({
       ...props,
-
       InputEmail: new InputBlock({
         label_for: "email",
         label_text: "Email",
         type: "text",
         id: "email",
         name: "email",
+        label: "email",
+        placeholder: "",
       }),
 
       InputLogin: new InputBlock({
@@ -27,33 +28,42 @@ class UserSettingsPage extends Block {
 
       InputFirstName: new InputBlock({
         label_text: "Имя",
+        label: "Имя",
+        label_for: "first_name",
         type: "text",
         id: "first_name",
         name: "first_name",
+        placeholder: "",
       }),
 
       InputSecondName: new InputBlock({
         label_for: "second_name",
         label_text: "Фамилия",
+        label: "Фамилия",
         type: "text",
         id: "second_name",
         name: "second_name",
+        placeholder: "",
       }),
 
       InputDisplayName: new InputBlock({
         label_for: "display_name",
         label_text: "Имя в чате",
+        label: "Имя в чате",
         type: "text",
         id: "display_name",
         name: "display_name",
+        placeholder: "",
       }),
 
       InputPhone: new InputBlock({
         label_for: "phone",
         label_text: "Телефон",
+        label: "Телефон",
         type: "text",
         id: "phone",
         name: "phone",
+        placeholder: "",
       }),
 
       InputOldPassword: new InputBlock({
@@ -63,6 +73,7 @@ class UserSettingsPage extends Block {
         label_for: "oldPassword",
         label_text: "Старый пароль",
         label: "oldPassword",
+        placeholder: "",
       }),
 
       InputNewPassword: new InputBlock({
@@ -72,12 +83,11 @@ class UserSettingsPage extends Block {
         label_for: "newPassword",
         label_text: "Новый пароль",
         label: "newPassword",
-        // onBlur: (e: Event) => this.handleBlur(e),
+        placeholder: "",
       }),
 
       SubmitButton: new Button({
-        name: "save",
-        label: "Сохранить",
+        button_text: "Сохранить",
         type: "submit",
         onClick: (event: Event) => this.handleSubmit(event),
       }),
@@ -89,7 +99,7 @@ class UserSettingsPage extends Block {
     });
   }
 
-  validateAllInputs(e: Event) {
+  validateAllInputs() {
     const childrenToCheck = [
       this.children.InputNewPassword,
       this.children.InputEmail,
@@ -129,7 +139,7 @@ class UserSettingsPage extends Block {
 
   handleSubmit(e: Event) {
     e.preventDefault();
-    this.validateAllInputs(e);
+    this.validateAllInputs();
     this.children.InputNewPassword.handleBlur();
     this.children.InputEmail.handleBlur();
     this.children.InputDisplayName.handleBlur();
@@ -140,21 +150,6 @@ class UserSettingsPage extends Block {
     this.children.InputPhone.handleBlur();
   }
 
-  // handleBlur(e: Event) {
-  //   const oldPassword =
-  //     this.children.InputOldPassword.children.InputField.getContent().value;
-  //   const newPassword =
-  //     this.children.InputNewPassword.children.InputField.getContent().value;
-
-  //   if (!validatePassword(newPassword)) {
-  //     this.children.InputNewPassword.setErrorText("Неверный пароль");
-  //     return;
-  //   }
-  //   if (oldPassword !== newPassword) {
-  //     this.children.InputNewPassword.setErrorText("Пароли не совпадают");
-  //     return;
-  //   }
-  // }
   render() {
     return `
          <div class="user-container">

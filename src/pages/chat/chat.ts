@@ -1,8 +1,9 @@
 import Block from "../../core/Block";
 import { ChatList, ChatMessages } from "../../components";
 
-class ChatPage extends Block {
-  constructor(props) {
+interface IChatPage {}
+class ChatPage extends Block<IChatPage> {
+  constructor(props: IChatPage) {
     super({
       ...props,
       activeChatId: null,
@@ -11,9 +12,6 @@ class ChatPage extends Block {
     });
   }
 
-  setActiveChat(chatId) {
-    this.setProps({ activeChatId: chatId });
-  }
   render() {
     return `<div class="chat-container">
                {{{ChatList}}}
@@ -21,4 +19,5 @@ class ChatPage extends Block {
             </div>`;
   }
 }
+
 export default ChatPage;

@@ -2,8 +2,16 @@ import Block from "../../core/Block";
 import { Button, PageTitle, InputBlock, Link } from "../../components";
 import { validateLogin, validatePassword } from "../../utils/validation";
 
-class LoginPage extends Block {
-  constructor(props) {
+interface ILoginPage {
+  TitleOfPage: PageTitle;
+  InputLogin: InputBlock;
+  InputPassword: InputBlock;
+  ButtonLogin: Button;
+  SignupLink: Link;
+}
+
+class LoginPage extends Block<ILoginPage> {
+  constructor(props: ILoginPage) {
     super({
       ...props,
       TitleOfPage: new PageTitle({
@@ -25,10 +33,11 @@ class LoginPage extends Block {
         label_for: "password",
         label_text: "Пароль",
         label: "Пароль",
+        placeholder: "",
       }),
 
       ButtonLogin: new Button({
-        label: "Войти",
+        button_text: "Войти",
         type: "submit",
         onClick: (event: Event) => this.handleSubmit(event),
       }),
@@ -46,7 +55,6 @@ class LoginPage extends Block {
 
   handleSubmit(event: Event) {
     event.preventDefault();
-
     const loginInput = (
       this.children.InputLogin.children.InputField.getContent() as HTMLInputElement
     ).value;

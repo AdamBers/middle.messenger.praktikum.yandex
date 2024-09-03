@@ -1,7 +1,19 @@
 import Block from "../../core/Block";
 
-class Input extends Block {
-  constructor(props) {
+interface InputElementProps {
+  name: string;
+  type: string;
+  id?: string;
+  placeholder?: string;
+  accept?: string;
+  events?: {};
+  onInput?: (event: Event) => void;
+  onClick?: (event: Event) => void;
+  onBlur?: (event: Event) => void;
+}
+
+class InputElement extends Block<InputElementProps> {
+  constructor(props: InputElementProps) {
     super({
       ...props,
       events: {
@@ -24,4 +36,4 @@ class Input extends Block {
   }
 }
 
-export default Input;
+export default InputElement;

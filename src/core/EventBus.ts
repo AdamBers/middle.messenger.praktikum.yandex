@@ -1,9 +1,9 @@
 type Callback = (...args: any[]) => void;
 
-export default class EventBus {
-  private listeners: Record<string, Callback[]> = {};
+export default class EventBus<TEvents extends string> {
+  private listeners: Record<TEvents, Callback[]> = {} as Record<TEvents, Callback[]>;
 
-  on(event: string, callback: Callback): void {
+  on(event: TEvents, callback: Callback): void {
     if (!this.listeners[event]) {
       this.listeners[event] = [];
     }
@@ -13,7 +13,7 @@ export default class EventBus {
     }
   }
 
-  off(event: string, callback: Callback): void {
+  off(event: TEvents, callback: Callback): void {
     if (!this.listeners[event]) {
       throw new Error(`Нет события: ${event}`);
     }
@@ -23,7 +23,7 @@ export default class EventBus {
     );
   }
 
-  emit(event: string, ...args: any[]): void {
+  emit(event: TEvents, ...args: any[]): void {
     if (!this.listeners[event]) {
       throw new Error(`Нет события: ${event}`);
     }

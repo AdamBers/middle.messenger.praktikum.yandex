@@ -1,9 +1,12 @@
 import Block from "../../core/Block";
 
-class ChatItem extends Block {
-  constructor(props) {
+type ChatItemProps = {};
+
+class ChatItem extends Block<ChatItemProps> {
+  constructor(props: ChatItemProps) {
     super({ ...props });
   }
+
   render(): string {
     return `<div class="chat-item {{#if selectedChat}} chat-item__selectedChat{{/if}}">
                <div class="chat-item__avatar chat-item__block {{#if current}} chat-item__block--current{{/if}}">
@@ -36,9 +39,8 @@ class ChatItem extends Block {
                      </div>
                   {{/if}}
                </div>
-                
-            </div>
-      `;
+            </div>`;
   }
 }
+
 export default ChatItem;

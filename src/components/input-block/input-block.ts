@@ -1,5 +1,5 @@
 import Block from "../../core/Block";
-import Input from "./input";
+import InputElement from "./input-element";
 import ErrorLine from "./errorLine";
 import {
   validateLogin,
@@ -10,11 +10,26 @@ import {
   validatePhone,
 } from "../../utils/validation";
 
-class InputBlock extends Block {
-  constructor(props) {
+interface IInputBlock {
+  name: string;
+  id: string;
+  label_for: string;
+  label: string;
+  label_text: string;
+  type: string;
+  placeholder: string;
+  onBlur?: (e: Event) => void;
+}
+interface IInputBlockChildren {
+  InputField: InputElement;
+  ErrorLine: ErrorLine;
+}
+
+class InputBlock extends Block<IInputBlock & IInputBlockChildren> {
+  constructor(props: IInputBlock) {
     super({
       ...props,
-      InputField: new Input({
+      InputField: new InputElement({
         name: props.name,
         id: props.id,
         type: props.type,

@@ -17,12 +17,7 @@ const pages = {
   500: [Pages.ServerErrorPage],
 };
 
-// Object.entries(Components).forEach(([name, component]) => {
-//   Handlebars.registerPartial(name, component);
-// });
-
 function navigate(page: string) {
-  //@ts-ignore
   const [source, context] = pages[page];
   const container = document.getElementById("app")!;
 
@@ -30,7 +25,6 @@ function navigate(page: string) {
     const page = new source(context);
     container.innerHTML = "";
     container.append(page.getContent());
-    // page.dispatchComponentDidMount();
     return;
   }
 
@@ -39,13 +33,16 @@ function navigate(page: string) {
 
 document.addEventListener("DOMContentLoaded", () => navigate("/"));
 
-document.addEventListener("click", (e) => {
-  //@ts-ignore
-  const page = e.target.getAttribute("page");
+document.addEventListener("click", (e: Event) => {
+  // Проверяем, что e.target не null и является элементом
+  const target = e.target as HTMLElement | null;
 
-  if (page) {
-    e.preventDefault();
-    navigate(page);
-    e.stopImmediatePropagation();
+  if (target) {
+    const page = target.getAttribute("page");
+    if (page) {
+      e.preventDefault();
+      navigate(page);
+      e.stopImmediatePropagation();
+    }
   }
 });

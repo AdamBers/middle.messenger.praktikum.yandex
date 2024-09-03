@@ -1,7 +1,10 @@
 import Block from "../../core/Block";
 import { PageTitle, Link } from "../../components";
 
-class HomePage extends Block {
+interface IHomePage {
+
+}
+class HomePage extends Block<IHomePage> {
   init() {
     const TitleOfPage = new PageTitle({ title: "HomePage" });
 
