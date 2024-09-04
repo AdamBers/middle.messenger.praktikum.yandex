@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "rootDir": "src",
+    "rootDir": "./src",
     "outDir": "./dist",
     "target": "ES2020",
     "noEmit": true,
@@ -20,6 +20,6 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true
   },
-  "include": ["eslint.config.js", "stylelint.config.js", "src"],
+  "include": ["eslint.config.js", "stylelint.config.js", "./src"],
   "exclude": ["node_modules"]
 }
