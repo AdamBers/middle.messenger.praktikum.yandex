@@ -9,6 +9,7 @@ export default {
     //  "block-no-empty": true,
     //  "unit-no-unknown": true,
     //  "selector-pseudo-element-colon-notation": "double",
-    indentation: 2,
+    // indentation: 2,
+    "selector-class-pattern": null,
   },
 };

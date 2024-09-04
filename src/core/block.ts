@@ -82,7 +82,9 @@ export default class Block<
   }
 
   componentDidMount(oldProps?: Props) {
-    console.log(oldProps);
+    if (oldProps) {
+      console.log(oldProps);
+    }
   }
 
   dispatchComponentDidMount() {
