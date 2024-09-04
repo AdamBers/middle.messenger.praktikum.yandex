@@ -23,4 +23,3 @@ class ServerErrorPage extends Block<IServerErrorPage> {
 }
 
 export default ServerErrorPage;
-
