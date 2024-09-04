@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
     "target": "ES2020",
+    "noEmit": true,
     "useDefineForClassFields": true,
     "module": "es2022",
     "esModuleInterop": true,
@@ -14,11 +15,15 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
 
+    "noImplicitAny": true,
+    "sourceMap": true,
+    "strictNullChecks": true,
+
     /* Linting */
     "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true
-  }, 
+  },
   "include": ["src"]
 }

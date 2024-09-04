@@ -81,7 +81,9 @@ export default class Block<
     });
   }
 
-  componentDidMount(oldProps?: Props) {}
+  componentDidMount(oldProps?: Props) {
+    console.log(oldProps);
+  }
 
   dispatchComponentDidMount() {
     this.eventBus().emit(Block.EVENTS.FLOW_CDM);
@@ -96,6 +98,7 @@ export default class Block<
   }
 
   componentDidUpdate(oldProps: Props, newProps: Props) {
+    console.log(oldProps, newProps);
     return true;
   }
 
