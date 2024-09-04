@@ -1,5 +1,5 @@
 import Handlebars from "handlebars";
-import * as Pages from "../src/pages";
+import * as Pages from "./pages";
 import "./style.scss";
 
 declare global {
@@ -17,14 +17,27 @@ const pages = {
   500: [Pages.ServerErrorPage],
 };
 
-function navigate(page: string) {
+type PageKeys = keyof typeof pages;
+
+function navigate(page: PageKeys) {
   const [source, context] = pages[page];
-  const container = document.getElementById("app")!;
+  const container = document.getElementById("app");
+
+  if (!container) {
+    console.error("App container not found");
+    return;
+  }
 
   if (source instanceof Object) {
-    const page = new source(context);
+    const pageInstance = new source(context);
     container.innerHTML = "";
-    container.append(page.getContent());
+
+    const content = pageInstance.getContent();
+    if (content) {
+      container.append(content);
+    } else {
+      console.warn("Content is null or undefined");
+    }
     return;
   }
 
@@ -34,15 +47,17 @@ function navigate(page: string) {
 document.addEventListener("DOMContentLoaded", () => navigate("/"));
 
 document.addEventListener("click", (e: Event) => {
-  // Проверяем, что e.target не null и является элементом
   const target = e.target as HTMLElement | null;
 
   if (target) {
     const page = target.getAttribute("page");
-    if (page) {
+
+    if (page && page in pages) {
       e.preventDefault();
-      navigate(page);
+      navigate(page as PageKeys);
       e.stopImmediatePropagation();
+    } else {
+      console.warn(`Unknown page: ${page}`);
     }
   }
 });
