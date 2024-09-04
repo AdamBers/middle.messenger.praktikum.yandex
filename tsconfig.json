@@ -20,6 +20,6 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true
   },
-  "include": ["eslint.config.js", "stylelint.config.js", "src"],
+  "include": ["eslint.config.js", "stylelint.config.js", "src", "dist/server.cjs"],
   "exclude": ["node_modules"]
 }
