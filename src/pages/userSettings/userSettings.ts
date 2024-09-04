@@ -1,8 +1,8 @@
 import { InputBlock, Button, Link } from "../../components";
 import Block from "../../core/Block";
 
-interface UserSettingsPage {}
-class UserSettingsPage extends Block<UserSettingsPage> {
+interface IUserSettingsPage {}
+class UserSettingsPage extends Block<IUserSettingsPage> {
   constructor(props: UserSettingsPage) {
     super({
       ...props,

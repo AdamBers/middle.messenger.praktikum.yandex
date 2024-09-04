@@ -1,0 +1,5 @@
+/dist
+**/*.min.js
+/node_modules
+eslint.config.js
+stylelint.config.js

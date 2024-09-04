@@ -9,7 +9,10 @@
     "preview": "vite preview",
     "start": "npm run build && node dist/server.js",
     "lint": "eslint .",
-    "type-check": "tsc --noEmit"
+    "lint:fix": "eslint . --fix",
+    "type-check": "tsc --noEmit",
+    "lint:styles": "stylelint '**/*.{css,scss}'",
+    "lintstyles:fix": "stylelint '**/*.{css,scss}' --fix"
   },
   "devDependencies": {
     "@eslint/js": "^9.9.1",

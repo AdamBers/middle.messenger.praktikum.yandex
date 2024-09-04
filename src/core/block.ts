@@ -210,7 +210,7 @@ export default class Block<
   }
 
   _createDocumentElement(tagName: "template"): HTMLTemplateElement {
-    return document.createElement(tagName) as HTMLTemplateElement;
+    return document.createElement(tagName);
   }
 
   show() {

@@ -2,6 +2,7 @@
 import express from "express";
 import path from "path";
 import { fileURLToPath } from "url";
+import process from "process";
 
 // Настройки для получения __dirname в ESM
 const __filename = fileURLToPath(import.meta.url);
