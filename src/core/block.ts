@@ -6,7 +6,8 @@ type Values<T> = T[keyof T];
 type TEvents = Values<typeof Block.EVENTS>;
 type PropsWithEvents = {
   events?: Record<string, EventListenerOrEventListenerObject>;
-  [key: string]: any; // Индексация строками
+  [key: string]: any; //да
+  // тут используем any (потому что так надо было, брат)
 };
 
 type ComponentChildren = {
@@ -32,8 +33,7 @@ export default class Block<
   public children: Children;
   public name: string;
 
-  // private _eventbus;
-  private eventBus: () => EventBus<TEvents>; // <-- Добавьте это объявление
+  private eventBus: () => EventBus<TEvents>;
 
   constructor(propsWithChildren: Props & Children) {
     const eventBus = new EventBus();
@@ -104,25 +104,19 @@ export default class Block<
     return true;
   }
 
-  _getChildrenAndProps(propsAndChildren: Props & Children) {
-    const children = {};
-    const props = {};
-
-    if (!propsAndChildren) {
-      return { children, props } as { children: Children; props: Props };
-    }
+  _getChildrenAndProps(propsAndChildren: Props & Partial<Children>) {
+    const children: Partial<Children> = {};
+    const props: Props = {} as Props;
 
     Object.entries(propsAndChildren).forEach(([key, value]) => {
       if (value instanceof Block) {
-        //@ts-ignore
-        children[key] = value;
+        (children as any)[key] = value;
       } else {
-        //@ts-ignore
-        props[key] = value;
+        (props as any)[key] = value;
       }
     });
 
-    return { children, props } as { children: Children; props: Props };
+    return { children: children as Children, props };
   }
 
   setProps = (nextProps: Partial<Props>) => {
@@ -151,18 +145,15 @@ export default class Block<
     const newElement = fragment.content.firstElementChild as HTMLElement | null;
 
     if (newElement) {
-      // Проверяем, что newElement не null
       Object.values(this.children).forEach((child) => {
         const stub = fragment.content.querySelector(`[data-id="${child._id}"]`);
 
         if (stub) {
-          // Проверяем, что stub не null
-          stub.replaceWith(child.getContent()!); // Уверяемся, что getContent() не возвращает null
+          stub.replaceWith(child.getContent()!);
         }
       });
 
       if (this._element) {
-        // Проверяем, что this._element не null
         this._element.replaceWith(newElement);
       }
 
@@ -175,7 +166,6 @@ export default class Block<
   render() {}
 
   getContent(): HTMLElement | null {
-    // Хак, чтобы вызвать CDM только после добавления в DOM
     if (this.element?.parentNode?.nodeType === Node.DOCUMENT_FRAGMENT_NODE) {
       setTimeout(() => {
         if (
@@ -201,7 +191,6 @@ export default class Block<
         const oldTarget = { ...target };
         (target as Record<string, any>)[prop as string] = value;
 
-        // Запускаем обновление компоненты
         self.eventBus().emit(Block.EVENTS.FLOW_CDU, oldTarget, target);
         return true;
       },

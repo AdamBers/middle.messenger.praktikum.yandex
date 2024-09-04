@@ -92,7 +92,7 @@ class UserSettingsPage extends Block<IUserSettingsPage> {
         onClick: (event: Event) => this.handleSubmit(event),
       }),
       BackHomeLink: new Link({
-        url: "/home",
+        url: "/",
         text: "",
         page: "home",
       }),
