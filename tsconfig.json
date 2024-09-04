@@ -1,9 +1,5 @@
 {
   "compilerOptions": {
-    "baseUrl": "./src",
-    "paths": {
-      "core/*": ["core/*"]
-    },
     "rootDir": "./src",
     "outDir": "./dist",
     "target": "ES2020",
