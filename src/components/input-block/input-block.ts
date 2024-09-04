@@ -37,9 +37,7 @@ class InputBlock extends Block<IInputBlock & IInputBlockChildren> {
         onBlur: (e: Event) => this.handleBlur(e),
         onInput: () => this.setErrorText(""),
       }),
-      ErrorLine: new ErrorLine({
-        errorText: "",
-      }),
+      ErrorLine: new ErrorLine({}),
     });
   }
 
