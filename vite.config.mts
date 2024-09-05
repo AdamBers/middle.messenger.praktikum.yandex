@@ -7,7 +7,7 @@ export default defineConfig({
 
   build: {
     outDir: resolve(__dirname, "dist"),
-    emptyOutDir: true,
+    // emptyOutDir: true,
   },
   assetsInclude: ["**/*.hbs"],
   server: {
@@ -17,5 +17,9 @@ export default defineConfig({
     port: 3000,
   },
   plugins: [handlebars({})],
-  resolve: {},
+  resolve: {
+    alias: {
+      handlebars: "handlebars/dist/handlebars.min.js",
+    },
+  },
 });
