@@ -17,9 +17,5 @@ export default defineConfig({
     port: 3000,
   },
   plugins: [handlebars({})],
-  resolve: {
-    alias: {
-      handlebars: "handlebars/dist/handlebars.min.js",
-    },
-  },
+  resolve: {},
 });

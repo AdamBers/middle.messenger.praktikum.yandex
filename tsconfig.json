@@ -17,7 +17,7 @@
     "noUnusedParameters": true,
     "sourceMap": true,
     "strictNullChecks": true,
-    "noFallthroughCasesInSwitch": true
+    "noFallthroughCasesInSwitch": true,
   },
   "include": ["eslint.config.js", "stylelint.config.js", "src/**/*"],
   "exclude": ["node_modules"]
