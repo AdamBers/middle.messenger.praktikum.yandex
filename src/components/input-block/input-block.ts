@@ -26,7 +26,7 @@ interface IInputBlockChildren {
 }
 
 class InputBlock extends Block<IInputBlock & IInputBlockChildren> {
-  constructor(props: IInputBlock) {
+  constructor(props: IInputBlock & IInputBlockChildren) {
     super({
       ...props,
       InputField: new InputElement({
