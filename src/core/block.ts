@@ -7,7 +7,7 @@ type TEvents = Values<typeof Block.EVENTS>;
 type PropsWithEvents = {
   events?: Record<string, EventListenerOrEventListenerObject>;
   [key: string]: any; //да
-  // тут используем any (потому что так надо было, брат)
+  // тут используем any (потому что иначе никак)
 };
 
 type ComponentChildren = {
