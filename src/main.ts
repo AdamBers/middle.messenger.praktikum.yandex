@@ -56,8 +56,6 @@ document.addEventListener("click", (e: Event) => {
       e.preventDefault();
       navigate(page as PageKeys);
       e.stopImmediatePropagation();
-    } else {
-      console.warn(`Unknown page: ${page}`);
     }
   }
 });

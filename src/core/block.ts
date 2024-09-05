@@ -108,6 +108,10 @@ export default class Block<
     const children: Partial<Children> = {};
     const props: Props = {} as Props;
 
+    if (!propsAndChildren) {
+      return { children: {} as Children, props: {} as Props };
+    }
+
     Object.entries(propsAndChildren).forEach(([key, value]) => {
       if (value instanceof Block) {
         (children as any)[key] = value;
