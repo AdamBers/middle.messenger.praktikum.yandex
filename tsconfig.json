@@ -2,8 +2,8 @@
   "compilerOptions": {
     "rootDir": "./src",
     "outDir": "./dist",
+    // "noEmit": true,
     "target": "ES2020",
-    "noEmit": true,
     "useDefineForClassFields": true,
     "module": "es2022",
     "esModuleInterop": true,
@@ -12,14 +12,14 @@
     "moduleResolution": "Node",
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "noImplicitAny": true,
-    "sourceMap": true,
-    "strictNullChecks": true,
     "strict": true,
+    "noImplicitAny": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
+    "sourceMap": true,
+    "strictNullChecks": true,
     "noFallthroughCasesInSwitch": true
   },
-  "include": ["eslint.config.js", "stylelint.config.js", "src", "dist/server.cjs"],
+  "include": ["eslint.config.js", "stylelint.config.js", "src/**/*"],
   "exclude": ["node_modules"]
 }
