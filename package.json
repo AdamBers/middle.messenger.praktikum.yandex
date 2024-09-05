@@ -10,7 +10,7 @@
     "start": "npm run build && node dist/server.js",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
-    "type-check": "tsc --noEmit",
+    "check": "tsc --noEmit",
     "lint:styles": "stylelint '**/*.{css,scss}'",
     "lintstyles:fix": "stylelint '**/*.{css,scss}' --fix"
   },
