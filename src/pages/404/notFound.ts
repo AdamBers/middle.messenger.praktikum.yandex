@@ -1,12 +1,13 @@
 import Block from "@/core/Block";
 import { PageTitle, Link } from "../../components";
 
-interface INotFoundPage {
+type NotFoundPageProps = {
   TitleOfPage: PageTitle;
   BackHomeLink: Link;
-}
-class NotFoundPage extends Block<INotFoundPage> {
-  constructor(props: INotFoundPage) {
+};
+
+class NotFoundPage extends Block<NotFoundPageProps> {
+  constructor(props: Partial<NotFoundPageProps>) {
     super({
       ...props,
       TitleOfPage: new PageTitle({ title: "Страница не найдена" }),

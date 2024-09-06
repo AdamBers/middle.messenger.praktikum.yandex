@@ -1,5 +1,10 @@
 import Block from "@/core/Block";
-class PageTitle extends Block {
+
+// Определим тип для пропсов компонента
+type PageTitleProps = {
+  title: string;
+};
+class PageTitle extends Block<PageTitleProps> {
   render(): string {
     return `
          <h1 class="page-title">
