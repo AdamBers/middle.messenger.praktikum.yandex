@@ -1,5 +1,6 @@
+import Block from "@/core/Block";
 import { PageTitle, Link } from "../../components";
-import Block from "../../core/Block";
+
 
 interface IServerErrorPage {}
 

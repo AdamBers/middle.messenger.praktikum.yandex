@@ -6,17 +6,14 @@ type Values<T> = T[keyof T];
 type TEvents = Values<typeof Block.EVENTS>;
 type PropsWithEvents = {
   events?: Record<string, EventListenerOrEventListenerObject>;
-  [key: string]: any; //да
-  // тут используем any (потому что иначе никак)
+  [key: string]: unknown;
 };
 
-type ComponentChildren = {
-  [key: string]: Block<object>;
-};
+type ComponentChildren = Record<string, Block<PropsWithEvents>>;
 
 export default class Block<
   Props extends PropsWithEvents = PropsWithEvents,
-  Children extends ComponentChildren = any
+  Children extends ComponentChildren = ComponentChildren
 > {
   static EVENTS = {
     INIT: "init",
@@ -35,7 +32,7 @@ export default class Block<
 
   private eventBus: () => EventBus<TEvents>;
 
-  constructor(propsWithChildren: Props & Children) {
+  constructor(propsWithChildren: Props & Partial<Children>) {
     const eventBus = new EventBus();
     const { props, children } = this._getChildrenAndProps(propsWithChildren);
     this.props = this._makePropsProxy({ ...props });
@@ -53,7 +50,7 @@ export default class Block<
     const { events = {} } = this.props;
     if (this._element) {
       Object.keys(events).forEach((eventName) => {
-        this._element!.addEventListener(eventName, events[eventName]);
+        this._element!.addEventListener(eventName, events[eventName]!);
       });
     }
   }
@@ -67,7 +64,6 @@ export default class Block<
 
   _init() {
     this.init();
-
     this.eventBus().emit(Block.EVENTS.FLOW_RENDER);
   }
 
@@ -75,7 +71,6 @@ export default class Block<
 
   _componentDidMount() {
     this.componentDidMount();
-
     Object.values(this.children).forEach((child) => {
       child.dispatchComponentDidMount();
     });
@@ -100,7 +95,6 @@ export default class Block<
   }
 
   componentDidUpdate(oldProps: Props, newProps: Props) {
-    console.log(oldProps, newProps);
     return true;
   }
 
@@ -108,15 +102,11 @@ export default class Block<
     const children: Partial<Children> = {};
     const props: Props = {} as Props;
 
-    if (!propsAndChildren) {
-      return { children: {} as Children, props: {} as Props };
-    }
-
     Object.entries(propsAndChildren).forEach(([key, value]) => {
       if (value instanceof Block) {
-        (children as any)[key] = value;
+        children[key as keyof Children] = value as Children[keyof Children];
       } else {
-        (props as any)[key] = value;
+        props[key as keyof Props] = value as Props[keyof Props];
       }
     });
 
@@ -127,7 +117,6 @@ export default class Block<
     if (!nextProps) {
       return;
     }
-
     Object.assign(this.props, nextProps);
   };
 
@@ -151,7 +140,6 @@ export default class Block<
     if (newElement) {
       Object.values(this.children).forEach((child) => {
         const stub = fragment.content.querySelector(`[data-id="${child._id}"]`);
-
         if (stub) {
           stub.replaceWith(child.getContent()!);
         }
@@ -179,7 +167,6 @@ export default class Block<
         }
       }, 100);
     }
-
     return this._element;
   }
 
@@ -188,12 +175,12 @@ export default class Block<
 
     return new Proxy(props, {
       get(target, prop: string | symbol) {
-        const value = target[prop as string];
+        const value = target[prop as keyof Props];
         return typeof value === "function" ? value.bind(target) : value;
       },
       set(target, prop: string | symbol, value) {
         const oldTarget = { ...target };
-        (target as Record<string, any>)[prop as string] = value;
+        target[prop as keyof Props] = value;
 
         self.eventBus().emit(Block.EVENTS.FLOW_CDU, oldTarget, target);
         return true;

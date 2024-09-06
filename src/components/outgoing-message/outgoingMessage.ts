@@ -1,4 +1,4 @@
-import Block from "../../core/Block";
+import Block from "@/core/Block";
 class OutgoingMessage extends Block {
   render(): string {
     return `

@@ -1,4 +1,4 @@
-import Block from "../../core/Block";
+import Block from "@/core/Block";
 import { Button, PageTitle, InputBlock, Link } from "../../components";
 import { validateLogin, validatePassword } from "../../utils/validation";
 

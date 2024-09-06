@@ -1,5 +1,5 @@
 import { PageTitle, InputBlock, Button, Link } from "../../components";
-import Block from "../../core/Block";
+import Block from "@/core/Block";
 
 interface ISignupPage {}
 class SignupPage extends Block<ISignupPage> {

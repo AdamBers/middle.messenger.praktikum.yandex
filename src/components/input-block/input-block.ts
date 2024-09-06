@@ -1,4 +1,4 @@
-import Block from "../../core/Block";
+import Block from "@/core/Block";
 import InputElement from "./input-element";
 import ErrorLine from "./errorLine";
 import {

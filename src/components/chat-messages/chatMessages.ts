@@ -1,4 +1,4 @@
-import Block from "../../core/Block";
+import Block from "@/core/Block";
 import { InputElement } from "../input-block";
 import { IncomingMessage } from "../incoming-message";
 import { OutgoingMessage } from "../outgoing-message";

@@ -1,5 +1,5 @@
 import { InputBlock, Button, Link } from "../../components";
-import Block from "../../core/Block";
+import Block from "@/core/Block";
 
 interface IUserSettingsPage {}
 class UserSettingsPage extends Block<IUserSettingsPage> {
