@@ -1,22 +1,25 @@
-import Block from "../../core/Block";
+import Block from "@/core/Block";
 
 type ButtonProps = {
   button_text?: string;
   type: string;
-  onClick: (e: Event) => void;
+  events?: {
+    click?: (e: Event) => void;
+  };
 };
 
-class Button extends Block {
+class Button extends Block<ButtonProps> {
   constructor(props: ButtonProps) {
     super({
       ...props,
       events: {
-        click: props.onClick,
+        click: props.events?.click,
       },
     });
   }
 
   render(): string {
+    console.log(this.props.events);
     return `
       <button class="button" type={{type}}>
          {{button_text}}

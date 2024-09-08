@@ -1,54 +1,52 @@
 import Block from "@/core/Block";
 import { PageTitle, Link } from "../../components";
 
-interface IHomePage {}
-class HomePage extends Block<IHomePage> {
-  init() {
-    const TitleOfPage = new PageTitle({ title: "HomePage" });
-
-    const LoginPage = new Link({
-      url: "/login",
-      page: "login",
-      text: "Логин",
+type HomePageProps = {};
+type HomePageChildren = {
+  TitleOfPage: PageTitle;
+  LoginPage: Link;
+  SignupPage: Link;
+  ChatPage: Link;
+  UserSettingsPage: Link;
+  NotFoundPage: Link;
+  ServerErrorPage: Link;
+};
+class HomePage extends Block<HomePageProps, HomePageChildren> {
+  constructor(props: HomePageProps) {
+    super({
+      ...props,
+      TitleOfPage: new PageTitle({ title: "HomePage" }),
+      LoginPage: new Link({
+        url: "/login",
+        page: "login",
+        text: "Логин",
+      }),
+      SignupPage: new Link({
+        url: "/signup",
+        text: "Регистрация",
+        page: "signup",
+      }),
+      ChatPage: new Link({
+        url: "/chat",
+        text: "Чат",
+        page: "chat",
+      }),
+      UserSettingsPage: new Link({
+        url: "/settings",
+        text: "Настройки",
+        page: "settings",
+      }),
+      NotFoundPage: new Link({
+        url: "/404",
+        text: "404",
+        page: "404",
+      }),
+      ServerErrorPage: new Link({
+        url: "/500",
+        text: "500",
+        page: "500",
+      }),
     });
-    const SignupPage = new Link({
-      url: "/signup",
-      text: "Регистрация",
-      page: "signup",
-    });
-
-    const ChatPage = new Link({
-      url: "/chat",
-      text: "Чат",
-      page: "chat",
-    });
-
-    const UserSettingsPage = new Link({
-      url: "/settings",
-      text: "Настройки",
-      page: "settings",
-    });
-
-    const NotFoundPage = new Link({
-      url: "/404",
-      text: "404",
-      page: "404",
-    });
-
-    const ServerErrorPage = new Link({
-      url: "/500",
-      text: "500",
-      page: "500",
-    });
-    this.children = {
-      TitleOfPage,
-      LoginPage,
-      SignupPage,
-      ChatPage,
-      UserSettingsPage,
-      NotFoundPage,
-      ServerErrorPage,
-    };
   }
   render(): string {
     return `

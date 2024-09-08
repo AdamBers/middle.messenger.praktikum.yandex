@@ -1,17 +1,25 @@
 import Block from "@/core/Block";
-import { Button, PageTitle, InputBlock, Link } from "../../components";
+import {
+  Button,
+  PageTitle,
+  InputBlock,
+  Link,
+  ErrorLine,
+} from "../../components";
 import { validateLogin, validatePassword } from "../../utils/validation";
 
-interface ILoginPage {
+type LoginPageProps = {};
+type LoginPageChildren = {
   TitleOfPage: PageTitle;
   InputLogin: InputBlock;
   InputPassword: InputBlock;
   ButtonLogin: Button;
   SignupLink: Link;
-}
+  ErrorLine: ErrorLine;
+};
 
-class LoginPage extends Block<ILoginPage> {
-  constructor(props: ILoginPage) {
+class LoginPage extends Block<LoginPageProps, LoginPageChildren> {
+  constructor(props: LoginPageChildren) {
     super({
       ...props,
       TitleOfPage: new PageTitle({
@@ -21,25 +29,27 @@ class LoginPage extends Block<ILoginPage> {
         type: "text",
         name: "login",
         id: "login",
-        label_for: "login",
         label: "Логин",
+        label_for: "login",
         label_text: "Логин",
         placeholder: "",
       }),
       InputPassword: new InputBlock({
         type: "password",
-        id: "password",
         name: "password",
+        id: "password",
+        label: "Пароль",
         label_for: "password",
         label_text: "Пароль",
-        label: "Пароль",
         placeholder: "",
       }),
 
       ButtonLogin: new Button({
         button_text: "Войти",
         type: "submit",
-        onClick: (event: Event) => this.handleSubmit(event),
+        events: {
+          click: (event: Event) => this.handleSubmit(event),
+        },
       }),
       SignupLink: new Link({
         url: "/signup",

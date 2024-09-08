@@ -1,9 +1,24 @@
-import { InputBlock, Button, Link } from "../../components";
 import Block from "@/core/Block";
+import { InputBlock, Button, Link } from "../../components";
 
-interface IUserSettingsPage {}
-class UserSettingsPage extends Block<IUserSettingsPage> {
-  constructor(props: UserSettingsPage) {
+type UserSettingsPageProps = {};
+type UserSettingsPageChildren = {
+  InputEmail: InputBlock;
+  InputLogin: InputBlock;
+  InputFirstName: InputBlock;
+  InputSecondName: InputBlock;
+  InputDisplayName: InputBlock;
+  InputPhone: InputBlock;
+  InputOldPassword: InputBlock;
+  InputNewPassword: InputBlock;
+  SubmitButton: Button;
+  BackHomeLink: Link;
+};
+class UserSettingsPage extends Block<
+  UserSettingsPageProps,
+  UserSettingsPageChildren
+> {
+  constructor(props: UserSettingsPageProps) {
     super({
       ...props,
       InputEmail: new InputBlock({
@@ -89,7 +104,9 @@ class UserSettingsPage extends Block<IUserSettingsPage> {
       SubmitButton: new Button({
         button_text: "Сохранить",
         type: "submit",
-        onClick: (event: Event) => this.handleSubmit(event),
+        events: {
+          click: (event: Event) => this.handleSubmit(event),
+        },
       }),
       BackHomeLink: new Link({
         url: "/",
@@ -99,7 +116,7 @@ class UserSettingsPage extends Block<IUserSettingsPage> {
     });
   }
 
-  validateAllInputs() {
+  validateAllInputs(e: Event) {
     const childrenToCheck = [
       this.children.InputNewPassword,
       this.children.InputEmail,
@@ -116,12 +133,12 @@ class UserSettingsPage extends Block<IUserSettingsPage> {
 
     for (const child of childrenToCheck) {
       // Вызываем handleBlur и сохраняем результат
-      child.handleBlur();
+      child.handleBlur(e);
 
-      // Получаем значение из поля
-      const value = child.children.InputField.getContent().value;
+      const inputElement =
+        child.children.InputField?.getContent() as HTMLInputElement | null;
+      const value = inputElement?.value;
 
-      // Проверяем, что поле не пустое
       if (!value || value === "") {
         areAllValid = false;
       } else {
@@ -139,15 +156,15 @@ class UserSettingsPage extends Block<IUserSettingsPage> {
 
   handleSubmit(e: Event) {
     e.preventDefault();
-    this.validateAllInputs();
-    this.children.InputNewPassword.handleBlur();
-    this.children.InputEmail.handleBlur();
-    this.children.InputDisplayName.handleBlur();
-    this.children.InputFirstName.handleBlur();
-    this.children.InputLogin.handleBlur();
-    this.children.InputOldPassword.handleBlur();
-    this.children.InputSecondName.handleBlur();
-    this.children.InputPhone.handleBlur();
+    this.validateAllInputs(e);
+    this.children.InputNewPassword.handleBlur(e);
+    this.children.InputEmail.handleBlur(e);
+    this.children.InputDisplayName.handleBlur(e);
+    this.children.InputFirstName.handleBlur(e);
+    this.children.InputLogin.handleBlur(e);
+    this.children.InputOldPassword.handleBlur(e);
+    this.children.InputSecondName.handleBlur(e);
+    this.children.InputPhone.handleBlur(e);
   }
 
   render() {

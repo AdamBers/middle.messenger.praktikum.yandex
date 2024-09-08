@@ -1,19 +1,15 @@
 import EventBus from "./EventBus";
-import Handlebars from "handlebars";
 import { nanoid } from "nanoid";
+import Handlebars from "handlebars";
 
-type Values<T> = T[keyof T];
 type TEvents = Values<typeof Block.EVENTS>;
-type PropsWithEvents = {
-  events?: Record<string, EventListenerOrEventListenerObject>;
-  [key: string]: unknown;
+type ComponentChildren = {
+  [key: string]: Block<object>;
 };
 
-type ComponentChildren = Record<string, Block<PropsWithEvents>>;
-
 export default class Block<
-  Props extends PropsWithEvents = PropsWithEvents,
-  Children extends ComponentChildren = ComponentChildren
+  Props  extends object = {},
+  Children extends ComponentChildren = {}
 > {
   static EVENTS = {
     INIT: "init",
@@ -26,14 +22,13 @@ export default class Block<
   _meta = null;
   _id = nanoid(6);
 
+  // private _eventbus;
   public props: Props;
   public children: Children;
   public name: string;
 
-  private eventBus: () => EventBus<TEvents>;
-
-  constructor(propsWithChildren: Props & Partial<Children>) {
-    const eventBus = new EventBus();
+  constructor(propsWithChildren: Props & Children) {
+    const eventBus = new EventBus<TEvents>();
     const { props, children } = this._getChildrenAndProps(propsWithChildren);
     this.props = this._makePropsProxy({ ...props });
     this.children = children;
@@ -48,11 +43,10 @@ export default class Block<
 
   _addEvents() {
     const { events = {} } = this.props;
-    if (this._element) {
-      Object.keys(events).forEach((eventName) => {
-        this._element!.addEventListener(eventName, events[eventName]!);
-      });
-    }
+
+    Object.keys(events).forEach((eventName) => {
+      this._element.addEventListener(eventName, events[eventName]);
+    });
   }
 
   _registerEvents(eventBus: EventBus<TEvents>) {
@@ -64,6 +58,7 @@ export default class Block<
 
   _init() {
     this.init();
+
     this.eventBus().emit(Block.EVENTS.FLOW_RENDER);
   }
 
@@ -71,16 +66,13 @@ export default class Block<
 
   _componentDidMount() {
     this.componentDidMount();
+
     Object.values(this.children).forEach((child) => {
       child.dispatchComponentDidMount();
     });
   }
 
-  componentDidMount(oldProps?: Props) {
-    if (oldProps) {
-      console.log(oldProps);
-    }
-  }
+  componentDidMount(oldProps: Props) {}
 
   dispatchComponentDidMount() {
     this.eventBus().emit(Block.EVENTS.FLOW_CDM);
@@ -98,25 +90,28 @@ export default class Block<
     return true;
   }
 
-  _getChildrenAndProps(propsAndChildren: Props & Partial<Children>) {
-    const children: Partial<Children> = {};
-    const props: Props = {} as Props;
+  _getChildrenAndProps(propsAndChildren: Props & Children) {
+    const children = {};
+    const props = {};
 
     Object.entries(propsAndChildren).forEach(([key, value]) => {
       if (value instanceof Block) {
-        children[key as keyof Children] = value as Children[keyof Children];
+        // @ts-ignore
+        children[key] = value;
       } else {
-        props[key as keyof Props] = value as Props[keyof Props];
+        //@ts-ignore
+        props[key] = value;
       }
     });
 
-    return { children: children as Children, props };
+    return { children, props } as { children: Children; props: Props };
   }
 
-  setProps = (nextProps: Partial<Props>) => {
+  setProps(nextProps: Props): void {
     if (!nextProps) {
       return;
     }
+
     Object.assign(this.props, nextProps);
   };
 
@@ -125,7 +120,7 @@ export default class Block<
   }
 
   _render() {
-    const propsAndStubs: PropsWithEvents = { ...this.props };
+    const propsAndStubs = { ...this.props };
 
     Object.entries(this.children).forEach(([key, child]) => {
       propsAndStubs[key] = `<div data-id="${child._id}"></div>`;
@@ -133,31 +128,41 @@ export default class Block<
 
     const fragment = this._createDocumentElement("template");
 
-    fragment.innerHTML = Handlebars.compile(this.render())(propsAndStubs);
-
-    const newElement = fragment.content.firstElementChild as HTMLElement | null;
-
-    if (newElement) {
-      Object.values(this.children).forEach((child) => {
-        const stub = fragment.content.querySelector(`[data-id="${child._id}"]`);
-        if (stub) {
-          stub.replaceWith(child.getContent()!);
-        }
-      });
-
-      if (this._element) {
-        this._element.replaceWith(newElement);
-      }
-
-      this._element = newElement;
+    if (this.name === "LoginPage") {
+      console.log(this.render());
+      console.log(propsAndStubs);
     }
 
+    fragment.innerHTML = Handlebars.compile(this.render())(propsAndStubs);
+    if (this.name === "LoginPage") {
+      console.log(fragment.innerHTML);
+    }
+
+    const newElement = fragment.content.firstElementChild;
+
+    Object.values(this.children).forEach((child) => {
+      const stub = fragment.content.querySelector(`[data-id="${child._id}"]`);
+
+      stub?.replaceWith(child.getContent());
+    });
+
+    if (this._element) {
+      this._element.replaceWith(newElement);
+    }
+
+    this._element = newElement;
+
     this._addEvents();
+
+    if (this.name === "LoginPage") {
+      console.log(newElement.innerHTML);
+    }
   }
 
   render() {}
 
-  getContent(): HTMLElement | null {
+  getContent() {
+    // Хак, чтобы вызвать CDM только после добавления в DOM
     if (this.element?.parentNode?.nodeType === Node.DOCUMENT_FRAGMENT_NODE) {
       setTimeout(() => {
         if (
@@ -167,21 +172,26 @@ export default class Block<
         }
       }, 100);
     }
+
     return this._element;
   }
 
   _makePropsProxy(props: Props) {
+    // Можно и так передать this
+    // Такой способ больше не применяется с приходом ES6+
     const self = this;
 
     return new Proxy(props, {
-      get(target, prop: string | symbol) {
-        const value = target[prop as keyof Props];
+      get(target, prop) {
+        const value = target[prop];
         return typeof value === "function" ? value.bind(target) : value;
       },
-      set(target, prop: string | symbol, value) {
+      set(target, prop, value) {
         const oldTarget = { ...target };
-        target[prop as keyof Props] = value;
+        target[prop] = value;
 
+        // Запускаем обновление компоненты
+        // Плохой cloneDeep, в следующей итерации нужно заставлять добавлять cloneDeep им самим
         self.eventBus().emit(Block.EVENTS.FLOW_CDU, oldTarget, target);
         return true;
       },
@@ -191,21 +201,16 @@ export default class Block<
     });
   }
 
-  _createDocumentElement(tagName: "template"): HTMLTemplateElement {
+  _createDocumentElement(tagName: string) {
+    // Можно сделать метод, который через фрагменты в цикле создаёт сразу несколько блоков
     return document.createElement(tagName);
   }
 
   show() {
-    const content = this.getContent();
-    if (content) {
-      content.style.display = "block";
-    }
+    this.getContent()!.style.display = "block";
   }
 
   hide() {
-    const content = this.getContent();
-    if (content) {
-      content.style.display = "none";
-    }
+    this.getContent()!.style.display = "none";
   }
 }

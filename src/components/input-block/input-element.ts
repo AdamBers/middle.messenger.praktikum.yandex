@@ -1,36 +1,37 @@
 import Block from "@/core/Block";
 
-interface InputElementProps {
-  name: string;
-  type: string;
+type InputElementProps = {
+  name?: string;
+  type?: string;
   id?: string;
   placeholder?: string;
-  accept?: string;
-  events?: {};
-  onInput?: (event: Event) => void;
-  onClick?: (event: Event) => void;
-  onBlur?: (event: Event) => void;
-}
+  events?: {
+    input?: (event: Event) => void;
+    click?: (event: Event) => void;
+    blur?: (event: Event) => void;
+  };
+};
+type InputElementChildren = {};
 
-class InputElement extends Block<InputElementProps> {
+class InputElement extends Block<InputElementProps, InputElementChildren> {
   constructor(props: InputElementProps) {
     super({
       ...props,
       events: {
-        input: props.onInput,
-        click: props.onClick,
-        blur: props.onBlur,
+        input: props.events?.input,
+        blur: props.events?.blur,
+        // click: props.events?.click,
       },
     });
   }
+
   render(): string {
     return `<input
         class="input__element"
-        type="{{type}}" 
-        placeholder="{{placeholder}}"
-        id="{{id}}" 
         name="{{name}}" 
-        accept="{{accept}}" 
+        type="{{type}}" 
+        id="{{id}}" 
+        placeholder="{{placeholder}}"
       />
    `;
   }

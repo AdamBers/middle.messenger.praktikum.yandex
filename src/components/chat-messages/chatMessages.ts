@@ -34,11 +34,13 @@ class ChatMessages extends Block<ChatMessagesProps, ChatMessagesChildren> {
         placeholder: "",
         name: "add_file",
         id: "file",
-        accept: "image/png, image/jpeg",
+        // accept: "image/png, image/jpeg",
       }),
       Button: new Button({
         type: "submit",
-        onClick: (e: Event) => this.handleSubmit(e),
+        events: {
+          click: (e: Event) => this.handleSubmit(e),
+        },
       }),
     });
   }
@@ -49,6 +51,8 @@ class ChatMessages extends Block<ChatMessagesProps, ChatMessagesChildren> {
       this.children.InputMessage.getContent() as HTMLInputElement;
     if (!inputElement?.value) {
       console.log("Поле ввода не должно быть пустым");
+    } else {
+      console.log(inputElement.value);
     }
   }
 

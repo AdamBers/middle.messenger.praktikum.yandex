@@ -10,34 +10,38 @@ import {
   validatePhone,
 } from "../../utils/validation";
 
-interface IInputBlock {
+type InputBlockProps = {
   name: string;
-  id: string;
-  label_for: string;
-  label: string;
-  label_text: string;
   type: string;
-  placeholder: string;
-  onBlur?: (e: Event) => void;
-}
-interface IInputBlockChildren {
+  id?: string;
+  placeholder?: string;
+  label_for: string;
+  label_text: string;
+  label: string;
+  className?: string;
+  // onBlur?: (e: Event) => void;
+};
+
+type InputBlockChildren = {
   InputField: InputElement;
   ErrorLine: ErrorLine;
-}
+};
 
-class InputBlock extends Block<IInputBlock & IInputBlockChildren> {
-  constructor(props: IInputBlock) {
+class InputBlock extends Block<InputBlockProps, InputBlockChildren> {
+  constructor(props: InputBlockProps) {
     super({
       ...props,
       InputField: new InputElement({
         name: props.name,
-        id: props.id,
         type: props.type,
+        id: props.id,
         placeholder: props.placeholder,
-        onBlur: (e: Event) => this.handleBlur(e),
-        onInput: () => this.setErrorText(""),
+        events: {
+          blur: (e: Event) => this.handleBlur(e),
+          input: () => this.setErrorText(""),
+        },
       }),
-      ErrorLine: new ErrorLine({}),
+      ErrorLine: new ErrorLine({ errorText: "" }),
     });
   }
 
@@ -46,63 +50,75 @@ class InputBlock extends Block<IInputBlock & IInputBlockChildren> {
   }
 
   handleBlur(e: Event) {
-    switch (this.props.name) {
-      case "login":
-        if (!validateLogin(this.children.InputField.getContent().value)) {
-          this.setErrorText("Неверный логин");
-        }
-        break;
+    const inputElement =
+      this.children.InputField.getContent() as HTMLInputElement;
 
-      case "password":
-      case "oldPassword":
-        if (!validatePassword(this.children.InputField.getContent().value)) {
-          this.setErrorText("Неверный пароль");
-        }
-        break;
+    if (inputElement) {
+      const inputValue = inputElement.value;
 
-      case "newPassword":
-        if (!validatePassword(this.children.InputField.getContent().value)) {
-          this.setErrorText("Неверный пароль");
-        }
-        break;
+      switch (this.props.name) {
+        case "login":
+          if (!validateLogin(inputValue)) {
+            this.setErrorText("Неверный логин");
+          }
+          break;
 
-      case "first_name":
-        if (!validateName(this.children.InputField.getContent().value)) {
-          this.setErrorText("Неверное имя");
-        }
-        break;
-      case "second_name":
-        if (!validateName(this.children.InputField.getContent().value)) {
-          this.setErrorText("Неверная фамилия");
-        }
-        break;
+        case "password":
+        case "oldPassword":
+          if (!validatePassword(inputValue)) {
+            this.setErrorText("Неверный пароль");
+          }
+          break;
 
-      case "email":
-        if (!validateEmail(this.children.InputField.getContent().value)) {
-          this.setErrorText("Неверный email");
-        }
-        break;
+        case "newPassword":
+          if (!validatePassword(inputValue)) {
+            this.setErrorText("Неверный пароль");
+          }
+          break;
 
-      case "message":
-        if (!validateMessage(this.children.InputField.getContent().value)) {
-          this.setErrorText("Неверное сообщение");
-        }
-        break;
-      case "phone":
-        if (!validatePhone(this.children.InputField.getContent().value)) {
-          this.setErrorText("Неверный номер");
-        }
-        break;
-      case "display_name":
-        if (!validateName(this.children.InputField.getContent().value)) {
-          this.setErrorText("Неверное имя");
-        }
-        break;
+        case "first_name":
+          if (!validateName(inputValue)) {
+            this.setErrorText("Неверное имя");
+          }
+          break;
+
+        case "second_name":
+          if (!validateName(inputValue)) {
+            this.setErrorText("Неверная фамилия");
+          }
+          break;
+
+        case "email":
+          if (!validateEmail(inputValue)) {
+            this.setErrorText("Неверный email");
+          }
+          break;
+
+        case "message":
+          if (!validateMessage(inputValue)) {
+            this.setErrorText("Неверное сообщение");
+          }
+          break;
+
+        case "phone":
+          if (!validatePhone(inputValue)) {
+            this.setErrorText("Неверный номер");
+          }
+          break;
+
+        case "display_name":
+          if (!validateName(inputValue)) {
+            this.setErrorText("Неверное имя");
+          }
+          break;
+      }
     }
-    if (this.props.onBlur) {
-      this.props.onBlur(e);
-    }
+
+    // if (this.props.onBlur) {
+    //   this.props.onBlur(e);
+    // }
   }
+
   render(): string {
     return `
       <div class="input{{#if className}} {{className}}{{/if}}">

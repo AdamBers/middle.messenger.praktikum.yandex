@@ -51,6 +51,7 @@ document.addEventListener("click", (e: Event) => {
 
   if (target) {
     const page = target.getAttribute("page");
+    e.preventDefault();
 
     if (page && page in pages) {
       e.preventDefault();

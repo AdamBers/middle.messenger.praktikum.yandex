@@ -8,3 +8,4 @@ export { PageTitle } from "./page-title";
 export { ChatMessages } from "./chat-messages";
 export { IncomingMessage } from "./incoming-message";
 export { OutgoingMessage } from "./outgoing-message";
+export { ErrorLine } from "./input-block";

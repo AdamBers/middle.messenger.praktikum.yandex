@@ -2,8 +2,15 @@ import Block from "@/core/Block";
 import { ChatItem } from "../chat-item";
 
 type ChatListProps = {};
+type ChatListChildren = {
+  chat1: ChatItem;
+  chat2: ChatItem;
+  chat3: ChatItem;
+  chat4: ChatItem;
+  chat5: ChatItem;
+};
 
-class ChatList extends Block<ChatListProps> {
+class ChatList extends Block<ChatListProps, ChatListChildren> {
   constructor(props: ChatListProps) {
     super({
       ...props,

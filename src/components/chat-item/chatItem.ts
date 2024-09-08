@@ -1,8 +1,9 @@
 import Block from "@/core/Block";
 
 type ChatItemProps = {};
+type ChatItemChildren = {};
 
-class ChatItem extends Block<ChatItemProps> {
+class ChatItem extends Block<ChatItemProps, ChatItemChildren> {
   constructor(props: ChatItemProps) {
     super({ ...props });
   }

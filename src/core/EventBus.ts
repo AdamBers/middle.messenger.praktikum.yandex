@@ -1,19 +1,24 @@
-type Callback = (...args: any[]) => void;
+type TCallback = (...args: any[]) => void;
+// здесь используем any чтобы принимать любые аргументы в функции
+type TListeners = {
+  [event: string]: Array<TCallback>;
+};
 
-export default class EventBus<TEvents extends string> {
-  private listeners: Record<TEvents, Callback[]> = {} as Record<TEvents, Callback[]>;
+class EventBus<TEvents extends string> {
+  private listeners: TListeners;
+  constructor() {
+    this.listeners = {};
+  }
 
-  on(event: TEvents, callback: Callback): void {
+  on(event: TEvents, callback: TCallback) {
     if (!this.listeners[event]) {
       this.listeners[event] = [];
     }
 
-    if (!this.listeners[event].includes(callback)) {
-      this.listeners[event].push(callback);
-    }
+    this.listeners[event].push(callback);
   }
 
-  off(event: TEvents, callback: Callback): void {
+  off(event: TEvents, callback: TCallback) {
     if (!this.listeners[event]) {
       throw new Error(`Нет события: ${event}`);
     }
@@ -23,13 +28,15 @@ export default class EventBus<TEvents extends string> {
     );
   }
 
-  emit(event: TEvents, ...args: any[]): void {
+  emit(event: keyof TListeners, ...args: any[]) {
     if (!this.listeners[event]) {
       throw new Error(`Нет события: ${event}`);
     }
 
-    this.listeners[event].forEach((listener) => {
+    this.listeners[event].forEach(function (listener) {
       listener(...args);
     });
   }
 }
+
+export default EventBus;

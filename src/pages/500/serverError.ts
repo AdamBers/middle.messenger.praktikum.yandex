@@ -1,11 +1,17 @@
 import Block from "@/core/Block";
 import { PageTitle, Link } from "../../components";
 
+type ServerErrorPageProps = {};
+type ServerErrorPageChildren = {
+  TitleOfPage: PageTitle;
+  BackHomeLink: Link;
+};
 
-interface IServerErrorPage {}
-
-class ServerErrorPage extends Block<IServerErrorPage> {
-  constructor(props: IServerErrorPage) {
+class ServerErrorPage extends Block<
+  ServerErrorPageProps,
+  ServerErrorPageChildren
+> {
+  constructor(props: ServerErrorPageProps) {
     super({
       ...props,
       TitleOfPage: new PageTitle({ title: "500" }),

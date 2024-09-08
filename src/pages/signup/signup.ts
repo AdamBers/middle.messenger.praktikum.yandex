@@ -1,9 +1,20 @@
 import { PageTitle, InputBlock, Button, Link } from "../../components";
 import Block from "@/core/Block";
 
-interface ISignupPage {}
-class SignupPage extends Block<ISignupPage> {
-  constructor(props: ISignupPage) {
+type SignupPageProps = {};
+type SignupPageChildren = {
+  TitleOfPage: PageTitle;
+  InputFirstName: InputBlock;
+  InputSecondName: InputBlock;
+  InputLogin: InputBlock;
+  InputEmail: InputBlock;
+  InputPassword: InputBlock;
+  InputPhone: InputBlock;
+  ButtonSignUp: Button;
+  LoginLink: Link;
+};
+class SignupPage extends Block<SignupPageProps, SignupPageChildren> {
+  constructor(props: SignupPageProps) {
     super({
       ...props,
       TitleOfPage: new PageTitle({
@@ -73,7 +84,9 @@ class SignupPage extends Block<ISignupPage> {
       ButtonSignUp: new Button({
         button_text: "Sign Up",
         type: "submit",
-        onClick: (e: Event) => this.handleSubmit(e),
+        events: {
+          click: (e: Event) => this.handleSubmit(e),
+        },
       }),
       LoginLink: new Link({
         url: "/login",
@@ -98,16 +111,15 @@ class SignupPage extends Block<ISignupPage> {
 
     for (const child of childrenToCheck) {
       // Вызов handleBlur для валидации поля
-      child.handleBlur();
+      child.handleBlur(e);
 
-      // Получаем значение поля
-      const value = child.children.InputField.getContent().value;
+      const inputElement =
+        child.children.InputField?.getContent() as HTMLInputElement | null;
+      const value = inputElement?.value;
 
-      // Если поле не заполнено, устанавливаем флаг areAllValid в false
       if (!value || value === "") {
         areAllValid = false;
       } else {
-        // Сохраняем значение поля в объект userData
         userData[child.props.name] = value;
       }
     }

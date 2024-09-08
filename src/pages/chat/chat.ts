@@ -1,9 +1,15 @@
 import Block from "../../core/Block";
 import { ChatList, ChatMessages } from "../../components";
 
-interface IChatPage {}
-class ChatPage extends Block<IChatPage> {
-  constructor(props: IChatPage) {
+type ChatPageProps = {
+  activeChatId: number | null;
+};
+type ChatPageChildren = {
+  ChatList: ChatList;
+  ChatMessages: ChatMessages;
+};
+class ChatPage extends Block<ChatPageProps, ChatPageChildren> {
+  constructor(props: ChatPageProps) {
     super({
       ...props,
       activeChatId: null,
