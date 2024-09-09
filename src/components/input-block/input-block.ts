@@ -37,7 +37,7 @@ class InputBlock extends Block<InputBlockProps, InputBlockChildren> {
         id: props.id,
         placeholder: props.placeholder,
         events: {
-          blur: (e: Event) => this.handleBlur(e),
+          blur: () => this.handleBlur(),
           input: () => this.setErrorText(""),
         },
       }),
@@ -49,7 +49,7 @@ class InputBlock extends Block<InputBlockProps, InputBlockChildren> {
     this.children.ErrorLine.setProps({ errorText });
   }
 
-  handleBlur(e: Event) {
+  handleBlur() {
     const inputElement =
       this.children.InputField.getContent() as HTMLInputElement;
 

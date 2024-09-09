@@ -116,7 +116,7 @@ class UserSettingsPage extends Block<
     });
   }
 
-  validateAllInputs(e: Event) {
+  validateAllInputs() {
     const childrenToCheck = [
       this.children.InputNewPassword,
       this.children.InputEmail,
@@ -133,7 +133,7 @@ class UserSettingsPage extends Block<
 
     for (const child of childrenToCheck) {
       // Вызываем handleBlur и сохраняем результат
-      child.handleBlur(e);
+      child.handleBlur();
 
       const inputElement =
         child.children.InputField?.getContent() as HTMLInputElement | null;
@@ -156,15 +156,15 @@ class UserSettingsPage extends Block<
 
   handleSubmit(e: Event) {
     e.preventDefault();
-    this.validateAllInputs(e);
-    this.children.InputNewPassword.handleBlur(e);
-    this.children.InputEmail.handleBlur(e);
-    this.children.InputDisplayName.handleBlur(e);
-    this.children.InputFirstName.handleBlur(e);
-    this.children.InputLogin.handleBlur(e);
-    this.children.InputOldPassword.handleBlur(e);
-    this.children.InputSecondName.handleBlur(e);
-    this.children.InputPhone.handleBlur(e);
+    this.validateAllInputs();
+    this.children.InputNewPassword.handleBlur();
+    this.children.InputEmail.handleBlur();
+    this.children.InputDisplayName.handleBlur();
+    this.children.InputFirstName.handleBlur();
+    this.children.InputLogin.handleBlur();
+    this.children.InputOldPassword.handleBlur();
+    this.children.InputSecondName.handleBlur();
+    this.children.InputPhone.handleBlur();
   }
 
   render() {

@@ -7,8 +7,12 @@ type ComponentChildren = {
   [key: string]: Block<object>;
 };
 
+type PropsWithEvents = {
+  events?: { [key: string]: (e: Event) => void };
+};
+
 export default class Block<
-  Props  extends object = {},
+  Props extends object = {},
   Children extends ComponentChildren = {}
 > {
   static EVENTS = {
@@ -22,10 +26,10 @@ export default class Block<
   _meta = null;
   _id = nanoid(6);
 
-  // private _eventbus;
-  public props: Props;
+  public props: Props & PropsWithEvents;
   public children: Children;
   public name: string;
+  private eventBus: () => EventBus<TEvents>;
 
   constructor(propsWithChildren: Props & Children) {
     const eventBus = new EventBus<TEvents>();
@@ -45,7 +49,10 @@ export default class Block<
     const { events = {} } = this.props;
 
     Object.keys(events).forEach((eventName) => {
-      this._element.addEventListener(eventName, events[eventName]);
+      const eventHandler = events[eventName];
+      if (eventHandler) {
+        this._element!.addEventListener(eventName, eventHandler);
+      }
     });
   }
 
@@ -58,21 +65,22 @@ export default class Block<
 
   _init() {
     this.init();
-
     this.eventBus().emit(Block.EVENTS.FLOW_RENDER);
   }
 
   init() {}
 
   _componentDidMount() {
-    this.componentDidMount();
+    this.componentDidMount(this.props);
 
     Object.values(this.children).forEach((child) => {
       child.dispatchComponentDidMount();
     });
   }
 
-  componentDidMount(oldProps: Props) {}
+  componentDidMount(_oldProps: Props) {
+
+  }
 
   dispatchComponentDidMount() {
     this.eventBus().emit(Block.EVENTS.FLOW_CDM);
@@ -86,83 +94,77 @@ export default class Block<
     this._render();
   }
 
-  componentDidUpdate(oldProps: Props, newProps: Props) {
+  componentDidUpdate(_oldProps: Props, _newProps: Props) {
     return true;
   }
 
   _getChildrenAndProps(propsAndChildren: Props & Children) {
-    const children = {};
-    const props = {};
+    // начало
+    const children: Record<string, Block<any>> = {}; // Используем Record для более гибкой типизации
+    // конец
+    const props: Partial<Props> = {};
 
     Object.entries(propsAndChildren).forEach(([key, value]) => {
       if (value instanceof Block) {
-        // @ts-ignore
-        children[key] = value;
+        // Явно приводим тип children, чтобы убрать ошибку
+        children[key] = value as Block<object>;
       } else {
-        //@ts-ignore
-        props[key] = value;
+        props[key as keyof Props] = value;
       }
     });
 
-    return { children, props } as { children: Children; props: Props };
+    // Явно приводим тип children к типу Children
+    return { children: children as unknown as Children, props: props as Props };
   }
 
-  setProps(nextProps: Props): void {
+  setProps(nextProps: Partial<Props>): void {
     if (!nextProps) {
       return;
     }
 
     Object.assign(this.props, nextProps);
-  };
+  }
 
   get element() {
     return this._element;
   }
 
   _render() {
-    const propsAndStubs = { ...this.props };
-
+    // начало
+    const propsAndStubs: Record<string, any> = { ...this.props }; // тут можно только так
+    // конец
     Object.entries(this.children).forEach(([key, child]) => {
       propsAndStubs[key] = `<div data-id="${child._id}"></div>`;
     });
 
-    const fragment = this._createDocumentElement("template");
-
-    if (this.name === "LoginPage") {
-      console.log(this.render());
-      console.log(propsAndStubs);
-    }
+    const fragment = this._createDocumentElement(
+      "template"
+    ) as HTMLTemplateElement;
 
     fragment.innerHTML = Handlebars.compile(this.render())(propsAndStubs);
-    if (this.name === "LoginPage") {
-      console.log(fragment.innerHTML);
-    }
 
-    const newElement = fragment.content.firstElementChild;
+    const newElement = fragment.content.firstElementChild as HTMLElement | null;
 
     Object.values(this.children).forEach((child) => {
       const stub = fragment.content.querySelector(`[data-id="${child._id}"]`);
 
-      stub?.replaceWith(child.getContent());
+      stub?.replaceWith(child.getContent()!);
     });
 
-    if (this._element) {
+    if (newElement && this._element) {
       this._element.replaceWith(newElement);
     }
 
     this._element = newElement;
 
     this._addEvents();
-
-    if (this.name === "LoginPage") {
-      console.log(newElement.innerHTML);
-    }
   }
 
-  render() {}
+  render() {
+    return "";
+  }
 
   getContent() {
-    // Хак, чтобы вызвать CDM только после добавления в DOM
     if (this.element?.parentNode?.nodeType === Node.DOCUMENT_FRAGMENT_NODE) {
       setTimeout(() => {
         if (
@@ -177,21 +179,17 @@ export default class Block<
   }
 
   _makePropsProxy(props: Props) {
-    // Можно и так передать this
-    // Такой способ больше не применяется с приходом ES6+
     const self = this;
 
     return new Proxy(props, {
-      get(target, prop) {
-        const value = target[prop];
+      get(target, prop: string) {
+        const value = target[prop as keyof Props];
         return typeof value === "function" ? value.bind(target) : value;
       },
-      set(target, prop, value) {
+      set(target, prop: string, value) {
         const oldTarget = { ...target };
-        target[prop] = value;
+        target[prop as keyof Props] = value;
 
-        // Запускаем обновление компоненты
-        // Плохой cloneDeep, в следующей итерации нужно заставлять добавлять cloneDeep им самим
         self.eventBus().emit(Block.EVENTS.FLOW_CDU, oldTarget, target);
         return true;
       },
@@ -202,7 +200,6 @@ export default class Block<
   }
 
   _createDocumentElement(tagName: string) {
-    // Можно сделать метод, который через фрагменты в цикле создаёт сразу несколько блоков
     return document.createElement(tagName);
   }
 

@@ -111,7 +111,7 @@ class SignupPage extends Block<SignupPageProps, SignupPageChildren> {
 
     for (const child of childrenToCheck) {
       // Вызов handleBlur для валидации поля
-      child.handleBlur(e);
+      child.handleBlur();
 
       const inputElement =
         child.children.InputField?.getContent() as HTMLInputElement | null;

@@ -29,7 +29,9 @@ function navigate(page: PageKeys) {
   }
 
   if (source instanceof Object) {
-    const pageInstance = new source(context);
+    // @ts-ignore
+    const pageInstance = new source(context); //тут не получилося иначе пока что
+    // спасибо за понимание!
     container.innerHTML = "";
 
     const content = pageInstance.getContent();
