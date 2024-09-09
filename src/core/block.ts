@@ -1,7 +1,8 @@
 import EventBus from "./EventBus";
 import { nanoid } from "nanoid";
-import Handlebars from "handlebars";
+import * as Handlebars from "handlebars";
 
+type Values<T extends Record<string, unknown>> = T[keyof T];
 type TEvents = Values<typeof Block.EVENTS>;
 type ComponentChildren = {
   [key: string]: Block<object>;
@@ -78,9 +79,7 @@ export default class Block<
     });
   }
 
-  componentDidMount(_oldProps: Props) {
-
-  }
+  componentDidMount(_oldProps: Props) {}
 
   dispatchComponentDidMount() {
     this.eventBus().emit(Block.EVENTS.FLOW_CDM);
