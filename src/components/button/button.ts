@@ -1,4 +1,4 @@
-import Block from "@/core/Block";
+import Block from "../../core/Block";
 
 type ButtonProps = {
   button_text?: string;
@@ -19,7 +19,7 @@ class Button extends Block<ButtonProps> {
   }
 
   render(): string {
-    console.log(this.props.events);
+    console.log(this.props);
     return `
       <button class="button" type={{type}}>
          {{button_text}}
