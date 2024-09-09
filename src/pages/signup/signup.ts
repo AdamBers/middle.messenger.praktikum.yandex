@@ -1,5 +1,5 @@
-import { PageTitle, InputBlock, Button, Link } from "../../components";
 import Block from "@/core/Block";
+import { PageTitle, InputBlock, Button, Link } from "../../components";
 
 type SignupPageProps = {};
 type SignupPageChildren = {
