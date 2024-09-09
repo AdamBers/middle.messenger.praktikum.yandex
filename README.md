@@ -1,8 +1,8 @@
 # Middle messenger Yandex praktikum
 
-## Этот проект представляет собой приложение чата
+## Этот проект представляет собой приложение чата, реализованный на классах, Event Bus и Proxy
 
-## Установка
+## Установка:
 
 1. Клонируйте репозиторий:  
    `git clone https://github.com/AdamBers/middle.messenger.praktikum.yandex`
@@ -23,16 +23,16 @@
 `https://www.figma.com/design/n5JSpKMihIrRYiPZJmx7sB/YandexChatAdam?node-id=0-1&m=dev&t=fO8MKBg7PGTxT33B-1`
 
 Страницы проекта:
-1. "/"               - Главная страница,
-2. "/login":         - Страница логина,
-3. "/signup":        - Страница регистрации,
-4. "/chatList":      - Список чатов,
-5. "/chatItem":      - Активный чат,
-6. "/userSettings"   - Настройки пользователя,
-7. "/404"            - Страница не найдена,
-8. "/500"            - Серверная ошибка,
+
+1. "/" - Главная страница,
+2. "/login" - Страница логина,
+3. "/signup" - Страница регистрации,
+4. "/chat" - Страница чатов,
+5. "/userSettings" - Настройки пользователя,
+6. "/404" - Страница не найдена,
+7. "/500" - Серверная ошибка,
 
 Ссылка на проект в Netlify:
 "https://middle-messenger-praktikum-yandex-adm.netlify.app/"
 
-Если у вас есть вопросы, не стесняйтесь связаться с нами по адресу - adambers2020@gmail.com
+Если у вас есть вопросы, свяжитесь с нами по адресу - adambers2020@gmail.com

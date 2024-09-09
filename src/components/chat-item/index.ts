@@ -1,2 +1,2 @@
-import "./chat-item.scss";
-export { default as ChatItem } from "./chat-item.hbs?raw";
+import "./chatItem.scss";
+export { default as ChatItem } from "./chatItem";

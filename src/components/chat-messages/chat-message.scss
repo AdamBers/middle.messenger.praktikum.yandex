@@ -1,0 +1,105 @@
+.chat-messages {
+  width: 100%;
+  padding: 20px 30px;
+  height: 100vh;
+  overflow-y: scroll;
+
+  .user {
+    width: calc(100% - 375px);
+    position: fixed;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #eaeaea;
+    padding-bottom: 10px;
+
+    .tripple-dots {
+      width: 3px;
+      height: 15px;
+      background: repeating-linear-gradient(
+        to bottom,
+        black,
+        black 3px,
+        transparent 3px,
+        transparent 6px
+      );
+    }
+
+    .user-info {
+      display: flex;
+      width: 250px;
+      justify-content: start;
+      align-items: center;
+      font-weight: bold;
+
+      .user-avatar {
+        width: 34px;
+        height: 34px;
+        border-radius: 50%;
+        background-color: #eee;
+        margin-right: 10px;
+      }
+    }
+  }
+
+  .content {
+    min-height: 100%;
+    padding: 50px 20px;
+
+    .date {
+      font-size: 12px;
+      color: #999;
+      text-align: center;
+      margin-bottom: 30px;
+    }
+  }
+
+  .messages-sending {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: calc(100% - 375px);
+    height: 54px;
+    border-top: 1px solid #b8b8b8;
+    position: absolute;
+    bottom: 20px;
+
+    .attach-button {
+      width: 32px;
+      height: 32px;
+      background: url("../../assets/img/attach.png");
+      background-size: contain;
+      background-repeat: no-repeat;
+    }
+
+    input[type="text"] {
+      width: 90%;
+      height: 32px;
+      outline: none;
+      border: none;
+      background-color: #e7e7e7;
+      border-radius: 16px;
+      color: #6d6d6d;
+      padding-left: 20px;
+    }
+
+    input[type="file"] {
+      width: 32px;
+      opacity: 0;
+      cursor: pointer;
+    }
+
+    .send-button {
+      width: 28px;
+      height: 28px;
+      background: url("../../assets/img/arrow-right.png");
+      cursor: pointer;
+
+      button {
+        width: 28px;
+        height: 28px;
+        opacity: 0;
+      }
+    }
+  }
+}

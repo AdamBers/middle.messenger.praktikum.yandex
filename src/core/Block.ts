@@ -1,7 +1,7 @@
 import EventBus from "./EventBus";
 import { nanoid } from "nanoid";
 import * as Handlebars from "handlebars";
-//  
+//
 type Values<T extends Record<string, unknown>> = T[keyof T];
 type TEvents = Values<typeof Block.EVENTS>;
 type ComponentChildren = {
@@ -59,7 +59,7 @@ export default class Block<
 
   _removeEvents() {
     const { events = {} } = this.props;
-  
+
     Object.keys(events).forEach((eventName) => {
       const eventHandler = events[eventName];
       if (eventHandler) {
@@ -67,7 +67,6 @@ export default class Block<
       }
     });
   }
-  
 
   _registerEvents(eventBus: EventBus<TEvents>) {
     eventBus.on(Block.EVENTS.INIT, this._init.bind(this));

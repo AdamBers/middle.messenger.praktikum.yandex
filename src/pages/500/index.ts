@@ -1,2 +1,2 @@
 import "./serverError.scss";
-export { default as ServerErrorPage } from "./serverError.hbs?raw";
+export { default as ServerErrorPage } from "./serverError";
