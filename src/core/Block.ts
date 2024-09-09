@@ -1,7 +1,7 @@
 import EventBus from "./EventBus";
 import { nanoid } from "nanoid";
 import * as Handlebars from "handlebars";
-//  
+//
 type Values<T extends Record<string, unknown>> = T[keyof T];
 type TEvents = Values<typeof Block.EVENTS>;
 type ComponentChildren = {
@@ -53,6 +53,17 @@ export default class Block<
       const eventHandler = events[eventName];
       if (eventHandler) {
         this._element!.addEventListener(eventName, eventHandler);
+      }
+    });
+  }
+
+  _removeEvents() {
+    const { events = {} } = this.props;
+
+    Object.keys(events).forEach((eventName) => {
+      const eventHandler = events[eventName];
+      if (eventHandler) {
+        this._element!.removeEventListener(eventName, eventHandler);
       }
     });
   }
@@ -151,6 +162,7 @@ export default class Block<
     });
 
     if (newElement && this._element) {
+      this._removeEvents();
       this._element.replaceWith(newElement);
     }
 
