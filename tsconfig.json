@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "rootDir": "./src",
+    "rootDir": "./",
     "outDir": "./dist",
     "baseUrl": "./",
     "paths": {
@@ -23,6 +23,6 @@
     "strictNullChecks": true,
     "noFallthroughCasesInSwitch": true
   },
-  "include": ["eslint.config.js", "stylelint.config.js", "src/**/*", "types"],
+  "include": ["src/**/*"],
   "exclude": ["node_modules"]
 }
