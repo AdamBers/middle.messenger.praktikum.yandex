@@ -1,14 +1,14 @@
-@import "../../assets/variables";
-
 .link {
-  font: $font-small;
+  font-family: inter, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  font-size: 12px;
+  font-weight: 500;
   display: flex;
   flex-direction: column;
   justify-content: center;
   height: 40px;
   width: 100%;
   text-align: center;
-  color: $link-color;
+  color: #3369f3;
   text-decoration: none;
   cursor: pointer;
 

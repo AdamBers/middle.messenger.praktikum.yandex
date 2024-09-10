@@ -1,7 +1,12 @@
-@import "../../assets/variables";
+.chat-container {
+  display: flex;
+  min-height: 100vh;
+  width: 100%;
 
-.chat-list {
-  background: $chat-list-bgcolor;
-  height: 100%;
-  overflow: auto;
+  .chat-list {
+    min-height: 100vh;
+    background-color: #fbfbfb;
+    width: 300px;
+    border-right: 1px solid #eaeaea;
+  }
 }

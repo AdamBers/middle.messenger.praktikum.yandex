@@ -1,56 +1,79 @@
-.container {
+.user-container {
   text-align: center;
   min-height: 100vh;
   margin-top: 0 !important;
-}
 
-.content {
-  padding-top: 100px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-.button-back {
-  position: absolute;
-  min-height: 100vh;
-  width: 50px;
-  background-color: #d9d9d9;
-}
+  .input__text-error {
+    text-align: end;
+  }
 
-.profile__avatar-empty {
-  width: 70px;
-  height: 70px;
-  border-radius: 50%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border: 1px solid black;
-  background-color: #e2e2e2;
-  margin-left: calc(50% - 35px);
-}
+  .content {
+    padding-top: 30px;
+    padding-bottom: 30px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
 
-.profile__avatar-empty img {
-  width: 50px;
-  height: 50px;
-}
-.user-name {
-  margin-bottom: 100px;
-}
+  .button-back {
+    position: absolute;
+    min-height: 100vh;
+    width: 50px;
+    background-color: #d9d9d9;
+    background-image: url("../../assets/img/arrow_back.png");
+    background-repeat: no-repeat;
+    background-position: center;
+    cursor: pointer;
 
-.input {
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-}
+    a {
+      min-height: 100vh;
+    }
+  }
 
-button[type="submit"] {
-  margin-top: 50px;
-}
+  .button-back:hover {
+    background-color: #c3c1c1;
+  }
 
-.avatar_input {
-  display: none;
-}
+  .profile__avatar-empty {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid black;
+    background-color: #e2e2e2;
+    margin-left: calc(50% - 35px);
+  }
 
-.profile__avatar {
-  cursor: pointer;
+  .profile__avatar-empty img {
+    width: 50px;
+    height: 50px;
+  }
+
+  .user-name {
+    margin-bottom: 10px;
+  }
+
+  .user-settings .input_block {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  button[type="submit"] {
+    margin-top: 50px;
+  }
+
+  .avatar_input {
+    display: none;
+  }
+
+  .profile__avatar {
+    cursor: pointer;
+  }
+
+  .user-settings form {
+    width: 500px;
+  }
 }
