@@ -17,17 +17,17 @@ class HomePage extends Block<HomePageProps, HomePageChildren> {
       ...props,
       TitleOfPage: new PageTitle({ title: "HomePage" }),
       LoginPage: new Link({
-        url: "/login",
+        url: "/",
         page: "login",
         text: "Логин",
       }),
       SignupPage: new Link({
-        url: "/signup",
+        url: "/sign-up",
         text: "Регистрация",
         page: "signup",
       }),
       ChatPage: new Link({
-        url: "/chat",
+        url: "/messenger",
         text: "Чат",
         page: "chat",
       }),

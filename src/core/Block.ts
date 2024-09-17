@@ -175,7 +175,7 @@ export default class Block<
     return "";
   }
 
-  getContent() {
+  getContent(): HTMLElement {
     if (this.element?.parentNode?.nodeType === Node.DOCUMENT_FRAGMENT_NODE) {
       setTimeout(() => {
         if (
@@ -186,7 +186,7 @@ export default class Block<
       }, 100);
     }
 
-    return this._element;
+    return this._element as HTMLElement;
   }
 
   _makePropsProxy(props: Props) {

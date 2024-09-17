@@ -52,7 +52,7 @@ class LoginPage extends Block<LoginPageProps, LoginPageChildren> {
         },
       }),
       SignupLink: new Link({
-        url: "/signup",
+        url: "/sign-up",
         text: "Создать",
         page: "signup",
       }),
