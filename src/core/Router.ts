@@ -12,8 +12,6 @@ type BlockClass = new (props: Record<string, unknown>) => Block;
 // type BlockClass<P = Record<string, unknown>> = new (props: P) => Block;
 // type BlockClass<T extends Record<string, unknown> = Record<string, unknown>> = new (props: T) => Block;
 
-
-
 class Router {
   private static __instance: Router;
   private routes: Route[] = [];
@@ -35,8 +33,6 @@ class Router {
     this.routes.push(route);
     return this;
   }
-  
-  
 
   start(): void {
     window.onpopstate = ((event: PopStateEvent) => {

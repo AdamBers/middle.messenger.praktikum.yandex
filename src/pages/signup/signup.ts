@@ -1,5 +1,6 @@
 import Block from "@/core/Block";
 import { PageTitle, InputBlock, Button, Link } from "../../components";
+import AuthApi from "@/api/auth";
 
 type SignupPageProps = {};
 type SignupPageChildren = {
@@ -13,6 +14,8 @@ type SignupPageChildren = {
   ButtonSignUp: Button;
   LoginLink: Link;
 };
+
+const authApi = new AuthApi(); // Создаем экземпляр API
 class SignupPage extends Block<SignupPageProps, SignupPageChildren> {
   constructor(props: SignupPageProps) {
     super({
@@ -89,14 +92,16 @@ class SignupPage extends Block<SignupPageProps, SignupPageChildren> {
         },
       }),
       LoginLink: new Link({
-        url: "/login",
+        url: "/",
         text: "Войти",
-        page: "login",
+        page: "/",
       }),
     });
   }
-  handleSubmit(e: Event) {
+
+  async handleSubmit(e: Event) {
     e.preventDefault();
+
     const childrenToCheck = [
       this.children.InputFirstName,
       this.children.InputSecondName,
@@ -125,8 +130,18 @@ class SignupPage extends Block<SignupPageProps, SignupPageChildren> {
     }
 
     if (areAllValid) {
-      console.log("Все поля заполнены верно.");
-      console.log("Введенные данные:", userData);
+      try {
+        // Используем API для регистрации
+        const response = await authApi.create(userData);
+
+        if ("id" in response) {
+          console.log("Успешная регистрация:", response);
+          window.router.go("/messenger");
+        }
+        console.log(response);
+      } catch (error) {
+        console.log("Ошибка при регистрации:", error);
+      }
     } else {
       console.log("Не все поля заполнены верно.");
     }
