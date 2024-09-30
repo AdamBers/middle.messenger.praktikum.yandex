@@ -8,11 +8,11 @@ type ChatListProps = {
 };
 
 type ChatListChildren = {
-  chatItems: ChatItem[]; // Массив компонентов ChatItem
+  chatItems?: ChatItem[]; // Массив компонентов ChatItem
 };
 
 class ChatList extends Block<ChatListProps, ChatListChildren> {
-  constructor(props: ChatListProps) {
+  constructor(props: ChatListProps, children: ChatListChildren) {
     super(props);
   }
 
@@ -36,10 +36,10 @@ class ChatList extends Block<ChatListProps, ChatListChildren> {
               alt: chat.title || "",
             })
         );
-
+        console.log(chatItems[0]);
         // Обновляем компонент и передаем созданные компоненты ChatItem в children
         this.setProps({ children: chatItems });
-        this.children = chatItems
+        this.children = chatItems;
       }
     } catch (error) {
       console.error("Error fetching chats:", error);
@@ -47,9 +47,12 @@ class ChatList extends Block<ChatListProps, ChatListChildren> {
   }
 
   render(): string {
+    // console.log(this.children);
     return `
       <div class="chat-list">
-        {{{chatItems}}}
+        {{#each children}}
+          {{this}}
+        {{/each}}
       </div>
     `;
   }

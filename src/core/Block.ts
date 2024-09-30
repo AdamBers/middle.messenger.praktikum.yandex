@@ -6,6 +6,7 @@ type Values<T extends Record<string, unknown>> = T[keyof T];
 type TEvents = Values<typeof Block.EVENTS>;
 type ComponentChildren = {
   [key: string]: Block<object>;
+
 };
 
 type PropsWithEvents = {
@@ -115,11 +116,17 @@ export default class Block<
     const props: Partial<Props> = {};
 
     Object.entries(propsAndChildren).forEach(([key, value]) => {
-      if (value instanceof Block) {
-        // Явно приводим тип children, чтобы убрать ошибку
-        children[key] = value as Block<object>;
+      if (Array.isArray(value)) {
+        if (value.every((x) => x instanceof Block)) {
+          children[key] = value;
+        }
       } else {
-        props[key as keyof Props] = value;
+        if (value instanceof Block) {
+          // Явно приводим тип children, чтобы убрать ошибку
+          children[key] = value as Block<object>;
+        } else {
+          props[key as keyof Props] = value;
+        }
       }
     });
 
@@ -144,7 +151,14 @@ export default class Block<
     const propsAndStubs: Record<string, any> = { ...this.props }; // тут можно только так
     // конец
     Object.entries(this.children).forEach(([key, child]) => {
-      propsAndStubs[key] = `<div data-id="${child._id}"></div>`;
+      if (Array.isArray(child)) {
+        console.log(child);
+        propsAndStubs[key] = child.map(
+          (component) => `<div data-id="${component._id}"></div>`
+        );
+      } else {
+        propsAndStubs[key] = `<div data-id="${child._id}"></div>`;
+      }
     });
 
     const fragment = this._createDocumentElement(
@@ -156,9 +170,17 @@ export default class Block<
     const newElement = fragment.content.firstElementChild as HTMLElement | null;
 
     Object.values(this.children).forEach((child) => {
-      const stub = fragment.content.querySelector(`[data-id="${child._id}"]`);
-
-      stub?.replaceWith(child.getContent()!);
+      if (Array.isArray(child)) {
+        child.forEach((component) => {
+          const stub = fragment.content.querySelector(
+            `[data-id="${component._id}"]`
+          );
+          stub?.replaceWith(component.getContent()!);
+        });
+      } else {
+        const stub = fragment.content.querySelector(`[data-id="${child._id}"]`);
+        stub?.replaceWith(child.getContent()!);
+      }
     });
 
     if (newElement && this._element) {
