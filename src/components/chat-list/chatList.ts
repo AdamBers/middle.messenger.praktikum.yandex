@@ -12,8 +12,23 @@ type ChatListChildren = {
 };
 
 class ChatList extends Block<ChatListProps, ChatListChildren> {
-  constructor(props: ChatListProps, children: ChatListChildren) {
-    super(props);
+  constructor(props: ChatListProps = {}) {
+    super({
+      ...props,
+      Buttons: [
+        new ChatItem({
+          userName: "sdfsd",
+          message: "dfsadsf",
+          unread: 1,
+        }),
+        new ChatItem({
+          userName: "dfads",
+          message: "dfsadsf",
+          unread: 1,
+        }),
+      ],
+      chatss: [],
+    });
   }
 
   async componentDidMount() {
@@ -25,8 +40,8 @@ class ChatList extends Block<ChatListProps, ChatListChildren> {
         const chats = response.data; // Получаем список чатов
 
         // Преобразуем каждый чат из response в ChatItem и добавляем их как children
-        const chatItems = chats.map(
-          (chat: ChatDTO) =>
+        const chatItems = chats?.map(
+          (chat: any) =>
             new ChatItem({
               userName: chat.title,
               message: chat.last_message ? chat.last_message.content : "",
@@ -36,10 +51,8 @@ class ChatList extends Block<ChatListProps, ChatListChildren> {
               alt: chat.title || "",
             })
         );
-        console.log(chatItems[0]);
-        // Обновляем компонент и передаем созданные компоненты ChatItem в children
-        this.setProps({ children: chatItems });
-        this.children = chatItems;
+        this.children.chatss = chatItems;
+        this.setProps({});
       }
     } catch (error) {
       console.error("Error fetching chats:", error);
@@ -47,11 +60,11 @@ class ChatList extends Block<ChatListProps, ChatListChildren> {
   }
 
   render(): string {
-    // console.log(this.children);
+    console.log(this.children);
     return `
       <div class="chat-list">
-        {{#each children}}
-          {{this}}
+        {{#each chatss}}
+          {{{this}}}
         {{/each}}
       </div>
     `;

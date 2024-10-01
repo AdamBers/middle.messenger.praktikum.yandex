@@ -6,7 +6,6 @@ type Values<T extends Record<string, unknown>> = T[keyof T];
 type TEvents = Values<typeof Block.EVENTS>;
 type ComponentChildren = {
   [key: string]: Block<object>;
-
 };
 
 type PropsWithEvents = {
@@ -87,7 +86,16 @@ export default class Block<
     this.componentDidMount(this.props);
 
     Object.values(this.children).forEach((child) => {
-      child.dispatchComponentDidMount();
+      // Добавляем проверку на instanceof Block
+      if (Array.isArray(child)) {
+        child.forEach((nestedChild) => {
+          if (nestedChild instanceof Block) {
+            nestedChild.dispatchComponentDidMount();
+          }
+        });
+      } else if (child instanceof Block) {
+        child.dispatchComponentDidMount();
+      }
     });
   }
 
@@ -110,19 +118,19 @@ export default class Block<
   }
 
   _getChildrenAndProps(propsAndChildren: Props & Children) {
-    // начало
+    // console.log(propsAndChildren);
     const children: Record<string, Block<any>> = {}; // Используем Record для более гибкой типизации
-    // конец
     const props: Partial<Props> = {};
 
     Object.entries(propsAndChildren).forEach(([key, value]) => {
+      // console.log(value);
       if (Array.isArray(value)) {
+        // console.log(value);
         if (value.every((x) => x instanceof Block)) {
-          children[key] = value;
+          children[key] = value as Block<object>;
         }
       } else {
         if (value instanceof Block) {
-          // Явно приводим тип children, чтобы убрать ошибку
           children[key] = value as Block<object>;
         } else {
           props[key as keyof Props] = value;
@@ -152,7 +160,6 @@ export default class Block<
     // конец
     Object.entries(this.children).forEach(([key, child]) => {
       if (Array.isArray(child)) {
-        console.log(child);
         propsAndStubs[key] = child.map(
           (component) => `<div data-id="${component._id}"></div>`
         );
