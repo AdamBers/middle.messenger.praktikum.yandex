@@ -15,18 +15,6 @@ class ChatList extends Block<ChatListProps, ChatListChildren> {
   constructor(props: ChatListProps = {}) {
     super({
       ...props,
-      Buttons: [
-        new ChatItem({
-          userName: "sdfsd",
-          message: "dfsadsf",
-          unread: 1,
-        }),
-        new ChatItem({
-          userName: "dfads",
-          message: "dfsadsf",
-          unread: 1,
-        }),
-      ],
       chatss: [],
     });
   }
@@ -52,7 +40,7 @@ class ChatList extends Block<ChatListProps, ChatListChildren> {
             })
         );
         this.children.chatss = chatItems;
-        this.setProps({});
+        this.setProps({ chatss: { chatItems } });
       }
     } catch (error) {
       console.error("Error fetching chats:", error);
@@ -60,7 +48,6 @@ class ChatList extends Block<ChatListProps, ChatListChildren> {
   }
 
   render(): string {
-    console.log(this.children);
     return `
       <div class="chat-list">
         {{#each chatss}}

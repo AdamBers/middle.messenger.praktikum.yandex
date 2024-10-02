@@ -1,5 +1,6 @@
 // import Handlebars from "handlebars";
 import * as Pages from "./pages";
+import { Store } from "./core/Store";
 import Router from "./core/Router";
 import "./style.scss";
 
@@ -8,6 +9,7 @@ declare global {
   export type Values<T extends Record<string, unknown>> = T[Keys<T>];
   interface Window {
     router: Router;
+    store: Store<any>;
   }
 }
 
@@ -15,7 +17,6 @@ const router = new Router("#app");
 window.router = router;
 
 router
-  // .use("/", Pages.HomePage)
   .use("/", Pages.LoginPage)
   .use("/sign-up", Pages.SignupPage)
   .use("/messenger", Pages.ChatPage)
@@ -24,10 +25,11 @@ router
   .use("/500", Pages.ServerErrorPage)
   .start();
 
-// window.store = new Store({
-//   isLoading: false,
-//   loginError: null,
-//   cats: [],
-//   user: null,
-//   selectedCard: null,
-// });
+const store = new Store({
+  isLoading: false,
+  loginError: null,
+  cats: [],
+  user: null,
+  selectedCard: null,
+});
+window.store = store;
