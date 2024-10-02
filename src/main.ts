@@ -28,8 +28,8 @@ router
 const store = new Store({
   isLoading: false,
   loginError: null,
-  cats: [],
+  messages: [],
   user: null,
-  selectedCard: null,
+  selectedChat: null,
 });
 window.store = store;
