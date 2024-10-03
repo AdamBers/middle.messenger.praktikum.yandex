@@ -1,9 +1,8 @@
 import Block from "@/core/Block";
 import { ChatItem } from "../chat-item";
-import ChatsAPI from "@/api/chats";
-import { ChatDTO } from "@/api/type"; // Тип для чатов
-import { LoadMessages } from "@/services/Messages";
+import { LoadChats } from "@/services/LoadChats"; // Импортируем новую функцию
 import { connect } from "@/utils/connect";
+import { ChatDTO } from "@/api/type";
 
 type ChatListProps = {
   chats?: ChatDTO[]; // Массив чатов
@@ -15,47 +14,42 @@ type ChatListChildren = {
 
 class ChatList extends Block<ChatListProps, ChatListChildren> {
   constructor(props: ChatListProps = {}) {
-    super({
-      ...props,
-      chatss: [],
-    });
+    super(props);
   }
 
-  componentDidMount(oldProps: any): void {
-    LoadMessages();
+  componentDidMount(): void {
+    LoadChats(); // Загружаем чаты при монтировании компонента
   }
-  // async componentDidMount() {
-  //   try {
-  //     // Получаем чаты с API
-  //     const response = await new ChatsAPI().getChats();
 
-  //     if (response.status === 200) {
-  //       const chats = response.data; // Получаем список чатов
+  componentDidUpdate(
+    oldProps: ChatListProps,
+    newProps: ChatListProps
+  ): boolean {
+    if (oldProps.chats !== newProps.chats) {
+      const chatItems =
+        newProps.chats?.map((chat: ChatDTO) => {
+          return new ChatItem({
+            userName: chat.title,
+            message: chat.last_message ? chat.last_message.content : "",
+            sendTime: chat.last_message ? chat.last_message.time : "",
+            unread: chat.unread_count ? String(chat.unread_count) : "",
+            avatar: chat.avatar || "",
+            alt: chat.title || "",
+          });
+        }) || [];
 
-  //       // Преобразуем каждый чат из response в ChatItem и добавляем их как children
-  //       const chatItems = chats?.map(
-  //         (chat: any) =>
-  //           new ChatItem({
-  //             userName: chat.title,
-  //             message: chat.last_message ? chat.last_message.content : "",
-  //             sendTime: chat.last_message ? chat.last_message.time : "",
-  //             unread: chat.unread_count ? String(chat.unread_count) : "",
-  //             avatar: chat.avatar || "",
-  //             alt: chat.title || "",
-  //           })
-  //       );
-  //       this.children.chatss = chatItems;
-  //       this.setProps({ chatss: { chatItems } });
-  //     }
-  //   } catch (error) {
-  //     console.error("Error fetching chats:", error);
-  //   }
-  // }
+      this.children.chatItems = chatItems;
+      this.setProps({ chatItems }); // Устанавливаем обновленные дочерние элементы
+      return true;
+    }
+
+    return false;
+  }
 
   render(): string {
     return `
       <div class="chat-list">
-        {{#each chatss}}
+        {{#each chatItems}}
           {{{this}}}
         {{/each}}
       </div>
@@ -63,4 +57,6 @@ class ChatList extends Block<ChatListProps, ChatListChildren> {
   }
 }
 
-export default ChatList;
+export default connect((state) => ({
+  chats: state.chats, // Получаем чаты из состояния
+}))(ChatList);

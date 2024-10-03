@@ -13,6 +13,15 @@ declare global {
   }
 }
 
+const store = new Store({
+  isLoading: false,
+  loginError: null,
+  chats: [],
+  user: null,
+  selectedChat: null,
+});
+window.store = store;
+
 const router = new Router("#app");
 window.router = router;
 
@@ -24,12 +33,3 @@ router
   .use("/404", Pages.NotFoundPage)
   .use("/500", Pages.ServerErrorPage)
   .start();
-
-const store = new Store({
-  isLoading: false,
-  loginError: null,
-  messages: [],
-  user: null,
-  selectedChat: null,
-});
-window.store = store;
