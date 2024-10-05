@@ -1,15 +1,16 @@
 import Block from "@/core/Block";
 import { ChatItem } from "../chat-item";
-import { LoadChats } from "@/services/LoadChats"; // Импортируем новую функцию
+import { LoadChats } from "@/services/LoadChats";
 import { connect } from "@/utils/connect";
 import { ChatDTO } from "@/api/type";
 
 type ChatListProps = {
-  chats?: ChatDTO[]; // Массив чатов
+  chats?: ChatDTO[];
+  selectedChatId?: number | null;
 };
 
 type ChatListChildren = {
-  chatItems?: ChatItem[]; // Массив компонентов ChatItem
+  chatItems?: ChatItem[];
 };
 
 class ChatList extends Block<ChatListProps, ChatListChildren> {
@@ -18,14 +19,22 @@ class ChatList extends Block<ChatListProps, ChatListChildren> {
   }
 
   componentDidMount(): void {
-    LoadChats(); // Загружаем чаты при монтировании компонента
+    LoadChats(); // Загружаем список чатов при монтировании компонента
+  }
+
+  onChatSelect(id: number) {
+    // Сохраняем выбранный чат в глобальном store
+    window.store.set({ selectedChat: id });
   }
 
   componentDidUpdate(
     oldProps: ChatListProps,
     newProps: ChatListProps
   ): boolean {
-    if (oldProps.chats !== newProps.chats) {
+    if (
+      oldProps.chats !== newProps.chats ||
+      oldProps.selectedChatId !== newProps.selectedChatId
+    ) {
       const chatItems =
         newProps.chats?.map((chat: ChatDTO) => {
           return new ChatItem({
@@ -35,11 +44,15 @@ class ChatList extends Block<ChatListProps, ChatListChildren> {
             unread: chat.unread_count ? String(chat.unread_count) : "",
             avatar: chat.avatar || "",
             alt: chat.title || "",
+            id: chat.id, // Передаем идентификатор чата
+            selectedChatId: newProps.selectedChatId || null, // Передаем идентификатор выбранного чата
+            onChatSelect: this.onChatSelect.bind(this), // Колбэк для выбора чата
           });
         }) || [];
 
       this.children.chatItems = chatItems;
-      this.setProps({ chatItems }); // Устанавливаем обновленные дочерние элементы
+      this.setProps({ chatItems });
+
       return true;
     }
 
@@ -57,6 +70,8 @@ class ChatList extends Block<ChatListProps, ChatListChildren> {
   }
 }
 
+// Соединение с глобальным состоянием через connect
 export default connect((state) => ({
-  chats: state.chats, // Получаем чаты из состояния
+  chats: state.chats, // Получаем список чатов из store
+  selectedChatId: state.selectedChat, // Получаем выбранный чат из store
 }))(ChatList);
