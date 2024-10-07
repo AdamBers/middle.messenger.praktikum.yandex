@@ -1,8 +1,10 @@
 import Block from "@/core/Block";
+import { connect } from "@/utils/connect";
 import { InputElement } from "../input-block";
 import { IncomingMessage } from "../incoming-message";
 import { OutgoingMessage } from "../outgoing-message";
 import { Button } from "../button";
+import { sendMessage } from "@/websocket/websocket";
 
 type ChatMessagesProps = {};
 type ChatMessagesChildren = {
@@ -18,7 +20,7 @@ class ChatMessages extends Block<ChatMessagesProps, ChatMessagesChildren> {
       ...props,
       IncomingMessage: new IncomingMessage({
         message:
-          "Привет! Смотри, тут всплыл интересный кусок лунной космической истории — НАСА в какой-то момент попросила Хассельблад адаптировать модель SWC для полетов на Луну. Сейчас мы все знаем что астронавты летали с моделью 500 EL — и к слову говоря, все тушки этих камер все еще находятся на поверхности Луны, так как астронавты с собой забрали только кассеты с пленкой.Хассельблад в итоге адаптировал SWC для космоса, но что-то пошло не так и на ракету они так никогда и не попали. Всего их было произведено 25 штук, одну из них недавно продали на аукционе за 45000 евро.",
+          "Привет! Смотри, тут всплыл интересный кусок лунной космической истории...",
       }),
       OutgoingMessage: new OutgoingMessage({
         message: "Круто",
@@ -34,7 +36,6 @@ class ChatMessages extends Block<ChatMessagesProps, ChatMessagesChildren> {
         placeholder: "",
         name: "add_file",
         id: "file",
-        // accept: "image/png, image/jpeg",
       }),
       Button: new Button({
         type: "submit",
@@ -52,17 +53,24 @@ class ChatMessages extends Block<ChatMessagesProps, ChatMessagesChildren> {
     if (!inputElement?.value) {
       console.log("Поле ввода не должно быть пустым");
     } else {
-      console.log(inputElement.value);
+      sendMessage(inputElement?.value);
     }
   }
 
   render(): string {
+    if (!this.props.chatTitle) {
+      return `
+        <div class="chat-messages">
+          <p class="choose-chat">Выберите чат...</p>
+        </div>
+      `;
+    }
     return `
          <div class="chat-messages">
             <div class="user">
                <div class="user-info">
                   <div class="user-avatar"></div>
-                  <span>Alex</span>
+                  <span>${this.props.chatTitle}</span>
                </div>
                <span class="tripple-dots"></span>
             </div>
@@ -87,4 +95,10 @@ class ChatMessages extends Block<ChatMessagesProps, ChatMessagesChildren> {
   }
 }
 
-export default ChatMessages;
+// Функция, которая извлекает необходимые данные из store
+const mapStateToProps = (state: any) => ({
+  chatTitle: state.chatTitle,
+});
+
+// Подключаем ChatMessages к store
+export default connect(mapStateToProps)(ChatMessages);

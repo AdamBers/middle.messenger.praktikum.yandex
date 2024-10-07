@@ -8,4 +8,7 @@ export default class ChatsAPI {
     // console.log(data);
     return chatsAPI.get("/");
   }
+  async getToken(chatId: number): Promise<TResponse> {
+    return chatsAPI.post<TResponse>(`/token/${chatId}`);
+  }
 }

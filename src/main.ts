@@ -2,6 +2,8 @@
 import * as Pages from "./pages";
 import { Store } from "./core/Store";
 import Router from "./core/Router";
+import { LoadChats } from "./services/LoadChats";
+import AuthApi from "./api/auth";
 import "./style.scss";
 
 declare global {
@@ -13,12 +15,21 @@ declare global {
   }
 }
 
+const authAPI = new AuthApi();
+
+const Me = await authAPI.me();
+const CurrentUserId = Me?.data?.id;
+const userName = Me?.data?.first_name;
+// console.log(Me);
+
 const store = new Store({
   isLoading: false,
   loginError: null,
   chats: [],
-  user: null,
+  userId: CurrentUserId || null,
+  userName: userName,
   selectedChat: null,
+  wsToken: null,
 });
 window.store = store;
 
@@ -33,3 +44,9 @@ router
   .use("/404", Pages.NotFoundPage)
   .use("/500", Pages.ServerErrorPage)
   .start();
+
+if (CurrentUserId === null || !CurrentUserId) {
+  window.router.go("/");
+  console.log("Not authorized");
+}
+LoadChats();

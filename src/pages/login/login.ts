@@ -97,6 +97,9 @@ class LoginPage extends Block<LoginPageProps, LoginPageChildren> {
           ) {
             console.log(response);
             window.router.go("/messenger");
+            const currentUser = await authApi.me();
+            console.log(currentUser);
+            window.store.set({ userId: currentUser?.data?.id });
           }
         }
       } catch (error) {

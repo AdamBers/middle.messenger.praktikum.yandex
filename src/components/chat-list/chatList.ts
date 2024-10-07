@@ -1,6 +1,8 @@
 import Block from "@/core/Block";
+import ChatsAPI from "@/api/chats";
+import { getOldMessages } from "@/websocket/websocket";
+import { connectWebSocket } from "@/websocket/websocket";
 import { ChatItem } from "../chat-item";
-import { LoadChats } from "@/services/LoadChats";
 import { connect } from "@/utils/connect";
 import { ChatDTO } from "@/api/type";
 
@@ -12,19 +14,25 @@ type ChatListProps = {
 type ChatListChildren = {
   chatItems?: ChatItem[];
 };
+// const authApi = new AuthApi();
+const chatsAPI = new ChatsAPI();
 
 class ChatList extends Block<ChatListProps, ChatListChildren> {
   constructor(props: ChatListProps = {}) {
     super(props);
   }
 
-  componentDidMount(): void {
-    LoadChats(); // Загружаем список чатов при монтировании компонента
-  }
+  componentDidMount(): void {}
 
-  onChatSelect(id: number) {
+  async onChatSelect(id: number, title: string) {
     // Сохраняем выбранный чат в глобальном store
     window.store.set({ selectedChat: id });
+    window.store.set({ chatTitle: title });
+    const requestToken = await chatsAPI.getToken(id);
+    const currentToken = requestToken.data?.token;
+    window.store.set({ wsToken: currentToken });
+    await connectWebSocket();
+    getOldMessages("0");
   }
 
   componentDidUpdate(
@@ -46,7 +54,7 @@ class ChatList extends Block<ChatListProps, ChatListChildren> {
             alt: chat.title || "",
             id: chat.id, // Передаем идентификатор чата
             selectedChatId: newProps.selectedChatId || null, // Передаем идентификатор выбранного чата
-            onChatSelect: this.onChatSelect.bind(this), // Колбэк для выбора чата
+            onChatSelect: () => this.onChatSelect(chat.id, chat.title), // Колбэк для выбора чата
           });
         }) || [];
 
@@ -73,5 +81,6 @@ class ChatList extends Block<ChatListProps, ChatListChildren> {
 // Соединение с глобальным состоянием через connect
 export default connect((state) => ({
   chats: state.chats, // Получаем список чатов из store
-  selectedChatId: state.selectedChat, // Получаем выбранный чат из store
+  selectedChatId: state.selectedChat,
+  userId: state.userId, // Получаем выбранный чат из store
 }))(ChatList);
