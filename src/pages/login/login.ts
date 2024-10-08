@@ -100,6 +100,7 @@ class LoginPage extends Block<LoginPageProps, LoginPageChildren> {
             const currentUser = await authApi.me();
             console.log(currentUser);
             window.store.set({ userId: currentUser?.data?.id });
+            window.store.set({ user: currentUser?.data });
           }
         }
       } catch (error) {

@@ -30,6 +30,7 @@ const store = new Store({
   userName: userName,
   selectedChat: null,
   wsToken: null,
+  user: null,
 });
 window.store = store;
 

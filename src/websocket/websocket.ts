@@ -56,6 +56,10 @@ export function connectWebSocket() {
       } else if (data.type === "message") {
         // Выводим сообщения
         console.log("Новое сообщение: ", data);
+        const currentMessages = window.store.getState().messages || [];
+        window.store.set({
+          messages: [data, ...currentMessages], // Добавляем полученное сообщение
+        });
       } else if (data.type === "get old") {
         // Логируем старые сообщения
         console.log("get old: ", data.messages);

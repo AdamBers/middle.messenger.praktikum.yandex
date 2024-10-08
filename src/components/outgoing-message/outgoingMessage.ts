@@ -1,12 +1,19 @@
 import Block from "@/core/Block";
-class OutgoingMessage extends Block {
+
+type OutgoingMessageProps = {
+  message: string; // Поле для сообщения
+};
+
+export default class OutgoingMessage extends Block<OutgoingMessageProps> {
+  constructor(props: OutgoingMessageProps) {
+    super(props);
+  }
+
   render(): string {
     return `
-         <div class="message outgoing-message">
-            <p>{{message}}</p>
-         </div>
-      `;
+      <div class="message outgoing-message">
+        <p>${this.props.message}</p> 
+      </div>
+    `;
   }
 }
-
-export default OutgoingMessage;

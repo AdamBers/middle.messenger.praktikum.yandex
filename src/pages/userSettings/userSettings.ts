@@ -1,4 +1,6 @@
 import Block from "@/core/Block";
+// import me from "@/api/auth";
+import AuthApi from "@/api/auth";
 import { InputBlock, Button, Link } from "../../components";
 
 type UserSettingsPageProps = {};
@@ -14,6 +16,7 @@ type UserSettingsPageChildren = {
   SubmitButton: Button;
   BackHomeLink: Link;
 };
+
 class UserSettingsPage extends Block<
   UserSettingsPageProps,
   UserSettingsPageChildren
@@ -109,9 +112,9 @@ class UserSettingsPage extends Block<
         },
       }),
       BackHomeLink: new Link({
-        url: "/",
+        url: "/messenger",
         text: "",
-        page: "home",
+        page: "messenger",
       }),
     });
   }
@@ -165,6 +168,12 @@ class UserSettingsPage extends Block<
     this.children.InputOldPassword.handleBlur();
     this.children.InputSecondName.handleBlur();
     this.children.InputPhone.handleBlur();
+  }
+
+  async componentDidMount(_oldProps: UserSettingsPageProps): Promise<void> {
+    const authAPI = new AuthApi();
+    const Me = await authAPI.me();
+    window.store.set({ user: Me?.data });
   }
 
   render() {
