@@ -5,6 +5,8 @@ import { IncomingMessage } from "../incoming-message";
 import { OutgoingMessage } from "../outgoing-message";
 import { Button } from "../button";
 import { sendMessage } from "@/websocket/websocket";
+import { TrippleDots } from "@/components/tripple-dots";
+import { Modal } from "@/components/modal";
 import { MessageDTO } from "@/api/types";
 
 type ChatMessagesProps = {
@@ -18,6 +20,7 @@ type ChatMessagesChildren = {
   InputMessage: InputElement;
   InputFile: InputElement;
   Button: Button;
+  TrippleDots: TrippleDots;
 };
 
 class ChatMessages extends Block<ChatMessagesProps, ChatMessagesChildren> {
@@ -42,39 +45,33 @@ class ChatMessages extends Block<ChatMessagesProps, ChatMessagesChildren> {
           click: (e: Event) => this.handleSubmit(e),
         },
       }),
+      TrippleDots: new TrippleDots({
+        isPopupHidden: true,
+        events: {
+          click: (e: Event) => this.handleHide(e),
+        },
+      }),
       renderedMessages: "",
+    });
+  }
+
+  handleHide(e: Event) {
+    e.stopPropagation();
+    this.children.TrippleDots.setProps({
+      isPopupHidden: !this.children.TrippleDots.props.isPopupHidden,
     });
   }
 
   handleSubmit(e: Event) {
     e.preventDefault();
-    const inputElement = this.children.InputMessage.getContent() as HTMLInputElement;
+    const inputElement =
+      this.children.InputMessage.getContent() as HTMLInputElement;
     if (!inputElement?.value) {
       console.log("Поле ввода не должно быть пустым");
     } else {
       sendMessage(inputElement.value);
-      inputElement.value = ''; // Очищаем поле после отправки
+      inputElement.value = ""; // Очищаем поле после отправки
     }
-  }
-
-  togglePopupMenu() {
-    const popupMenu = this.getContent().querySelector("#popup-menu") as HTMLElement;
-
-    if (popupMenu) {
-      popupMenu.classList.toggle("hidden");
-    }
-
-    console.log(popupMenu.classList);
-  }
-
-  handleAddUser() {
-    console.log("Добавить пользователя");
-    // Логика для добавления пользователя
-  }
-
-  handleRemoveUser() {
-    console.log("Удалить пользователя");
-    // Логика для удаления пользователя
   }
 
   renderMessages() {
@@ -101,25 +98,10 @@ class ChatMessages extends Block<ChatMessagesProps, ChatMessagesChildren> {
       .join("");
   }
 
-  componentDidMount(): void {
-    // Навешиваем события при первом монтировании
-    const trippleDots = this.getContent().querySelector("#tripple-dots") as HTMLElement;
-    if (trippleDots) {
-      trippleDots.addEventListener("click", () => this.togglePopupMenu());
-    }
-
-    const addUserButton = this.getContent().querySelector(".add-user") as HTMLElement;
-    if (addUserButton) {
-      addUserButton.addEventListener("click", () => this.handleAddUser());
-    }
-
-    const removeUserButton = this.getContent().querySelector(".remove-user") as HTMLElement;
-    if (removeUserButton) {
-      removeUserButton.addEventListener("click", () => this.handleRemoveUser());
-    }
-  }
-
-  componentDidUpdate(oldProps: ChatMessagesProps, newProps: ChatMessagesProps): boolean {
+  componentDidUpdate(
+    oldProps: ChatMessagesProps,
+    newProps: ChatMessagesProps
+  ): boolean {
     if (oldProps.messages !== newProps.messages) {
       const renderedMessages = this.renderMessages();
 
@@ -149,11 +131,7 @@ class ChatMessages extends Block<ChatMessagesProps, ChatMessagesChildren> {
             <div class="user-avatar"></div>
             <span>${this.props.chatTitle}</span>
           </div>
-          <span class="tripple-dots" id="tripple-dots"></span>
-          <div class="popup-menu hidden" id="popup-menu">
-            <button class="add-user">Добавить пользователя</button>
-            <button class="remove-user">Удалить пользователя</button>
-          </div>
+          {{{TrippleDots}}}
         </div>
         <div class="content">
           <div class="messages">

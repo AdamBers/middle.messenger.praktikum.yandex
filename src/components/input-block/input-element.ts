@@ -5,6 +5,7 @@ type InputElementProps = {
   type?: string;
   id?: string;
   placeholder?: string;
+  value?: string;
   events?: {
     input?: (event: Event) => void;
     click?: (event: Event) => void;
@@ -24,6 +25,10 @@ class InputElement extends Block<InputElementProps, InputElementChildren> {
       },
     });
   }
+  // componentDidUpdate() {
+  //   console.log("update input");
+  //   console.log(this.props);
+  // }
 
   render(): string {
     return `<input
@@ -32,6 +37,7 @@ class InputElement extends Block<InputElementProps, InputElementChildren> {
         type="{{type}}" 
         id="{{id}}" 
         placeholder="{{placeholder}}"
+        value="{{value}}"
       />
    `;
   }

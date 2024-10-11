@@ -9,3 +9,6 @@ export { ChatMessages } from "./chat-messages";
 export { IncomingMessage } from "./incoming-message";
 export { OutgoingMessage } from "./outgoing-message";
 export { ErrorLine } from "./input-block";
+export { TrippleDots } from "./tripple-dots";
+export { Modal } from "./modal";
+export { AddChat } from "./add-chat";

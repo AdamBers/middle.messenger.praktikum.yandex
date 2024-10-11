@@ -39,12 +39,32 @@ export class HTTPTransport {
     });
   }
 
+  put<TResponse>(
+    url: string,
+    options: OptionsWithoutMethod = {}
+  ): Promise<{ status: number; data: TResponse }> {
+    return this.request<TResponse>(`${this.apiUrl}${url}`, {
+      ...options,
+      method: METHOD.PUT,
+    });
+  }
+
+  delete<TResponse>(
+    url: string,
+    options: OptionsWithoutMethod = {}
+  ): Promise<{ status: number; data: TResponse }> {
+    return this.request<TResponse>(`${this.apiUrl}${url}`, {
+      ...options,
+      method: METHOD.DELETE,
+    });
+  }
+
   async request<TResponse>(
     url: string,
     options: Options = { method: METHOD.GET }
   ): Promise<{ status: number; data: TResponse }> {
     const { method, data } = options;
-
+    // console.log("Request body:", data ? JSON.stringify(data) : null);
     const response = await fetch(url, {
       method,
       credentials: "include",

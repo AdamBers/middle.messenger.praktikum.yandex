@@ -1,9 +1,12 @@
 import Block from "@/core/Block";
 import ChatsAPI from "@/api/chats";
+import { Link } from "@/components/link";
 import { getOldMessages } from "@/websocket/websocket";
 import { connectWebSocket } from "@/websocket/websocket";
 import { ChatItem } from "../chat-item";
+import { AddChat } from "../add-chat";
 import { connect } from "@/utils/connect";
+
 import { ChatDTO } from "@/api/type";
 
 type ChatListProps = {
@@ -13,13 +16,23 @@ type ChatListProps = {
 
 type ChatListChildren = {
   chatItems?: ChatItem[];
+  ProfileLink: Link;
+  AddChat: AddChat;
 };
 // const authApi = new AuthApi();
 const chatsAPI = new ChatsAPI();
 
 class ChatList extends Block<ChatListProps, ChatListChildren> {
   constructor(props: ChatListProps = {}) {
-    super(props);
+    super({
+      ...props,
+      ProfileLink: new Link({
+        url: "/settings",
+        page: "settings",
+        text: "Профиль  >",
+      }),
+      AddChat: new AddChat({}),
+    });
   }
 
   componentDidMount(): void {}
@@ -70,6 +83,8 @@ class ChatList extends Block<ChatListProps, ChatListChildren> {
   render(): string {
     return `
       <div class="chat-list">
+      {{{AddChat}}}
+      {{{ProfileLink}}} 
         {{#each chatItems}}
           {{{this}}}
         {{/each}}
