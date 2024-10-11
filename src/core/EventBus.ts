@@ -30,7 +30,8 @@ class EventBus<TEvents extends string> {
 
   emit(event: keyof TListeners, ...args: any[]) {
     if (!this.listeners[event]) {
-      throw new Error(`Нет события: ${event}`);
+      console.warn(`Нет события: ${event}`);
+      return; // Прекращаем выполнение, если нет слушателей
     }
 
     this.listeners[event].forEach(function (listener) {

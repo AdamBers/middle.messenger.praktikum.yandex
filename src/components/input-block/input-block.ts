@@ -19,6 +19,7 @@ type InputBlockProps = {
   label_text: string;
   label: string;
   className?: string;
+  value?: string;
   // onBlur?: (e: Event) => void;
 };
 
@@ -36,6 +37,7 @@ class InputBlock extends Block<InputBlockProps, InputBlockChildren> {
         type: props.type,
         id: props.id,
         placeholder: props.placeholder,
+        value: props.value,
         events: {
           blur: () => this.handleBlur(),
           input: () => this.setErrorText(""),
@@ -120,6 +122,7 @@ class InputBlock extends Block<InputBlockProps, InputBlockChildren> {
   }
 
   render(): string {
+    // console.log(this.props)
     return `
       <div class="input{{#if className}} {{className}}{{/if}}">
         <div class="input_block">

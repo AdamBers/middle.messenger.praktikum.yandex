@@ -1,64 +1,53 @@
-import Handlebars from "handlebars";
+// import Handlebars from "handlebars";
 import * as Pages from "./pages";
+import { Store } from "./core/Store";
+import Router from "./core/Router";
+import { LoadChats } from "./services/LoadChats";
+import AuthApi from "./api/auth";
 import "./style.scss";
 
 declare global {
   export type Keys<T extends Record<string, unknown>> = keyof T;
   export type Values<T extends Record<string, unknown>> = T[Keys<T>];
+  interface Window {
+    router: Router;
+    store: Store<any>;
+  }
 }
 
-const pages = {
-  login: [Pages.LoginPage],
-  signup: [Pages.SignupPage],
-  "/": [Pages.HomePage],
-  chat: [Pages.ChatPage],
-  settings: [Pages.UserSettingsPage],
-  404: [Pages.NotFoundPage],
-  500: [Pages.ServerErrorPage],
-};
+const authAPI = new AuthApi();
 
-type PageKeys = keyof typeof pages;
+const Me = await authAPI.me();
+const CurrentUserId = Me?.data?.id;
+const userName = Me?.data?.first_name;
+// console.log(Me);
 
-function navigate(page: PageKeys) {
-  const [source, context] = pages[page];
-  const container = document.getElementById("app");
-
-  if (!container) {
-    console.error("App container not found");
-    return;
-  }
-
-  if (source instanceof Object) {
-    // @ts-ignore
-    const pageInstance = new source(context); //тут не получилося иначе пока что
-    // спасибо за понимание!
-    container.innerHTML = "";
-
-    const content = pageInstance.getContent();
-    if (content) {
-      container.append(content);
-    } else {
-      console.warn("Content is null or undefined");
-    }
-    return;
-  }
-
-  container.innerHTML = Handlebars.compile(source)(context);
-}
-
-document.addEventListener("DOMContentLoaded", () => navigate("/"));
-
-document.addEventListener("click", (e: Event) => {
-  const target = e.target as HTMLElement | null;
-
-  if (target) {
-    const page = target.getAttribute("page");
-    e.preventDefault();
-
-    if (page && page in pages) {
-      e.preventDefault();
-      navigate(page as PageKeys);
-      e.stopImmediatePropagation();
-    }
-  }
+const store = new Store({
+  isLoading: false,
+  loginError: null,
+  chats: [],
+  userId: CurrentUserId || null,
+  userName: userName,
+  selectedChat: null,
+  wsToken: null,
+  user: {},
 });
+window.store = store;
+
+const router = new Router("#app");
+window.router = router;
+
+router
+  .use("/", Pages.LoginPage)
+  .use("/sign-up", Pages.SignupPage)
+  .use("/messenger", Pages.ChatPage)
+  .use("/settings", Pages.UserSettingsPage)
+  .use("/404", Pages.NotFoundPage)
+  .use("/500", Pages.ServerErrorPage)
+  .start();
+
+if (CurrentUserId === null || !CurrentUserId) {
+  window.router.go("/");
+  console.log("Not authorized");
+}
+LoadChats();

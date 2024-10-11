@@ -86,7 +86,16 @@ export default class Block<
     this.componentDidMount(this.props);
 
     Object.values(this.children).forEach((child) => {
-      child.dispatchComponentDidMount();
+      // Добавляем проверку на instanceof Block
+      if (Array.isArray(child)) {
+        child.forEach((nestedChild) => {
+          if (nestedChild instanceof Block) {
+            nestedChild.dispatchComponentDidMount();
+          }
+        });
+      } else if (child instanceof Block) {
+        child.dispatchComponentDidMount();
+      }
     });
   }
 
@@ -109,17 +118,23 @@ export default class Block<
   }
 
   _getChildrenAndProps(propsAndChildren: Props & Children) {
-    // начало
+    // console.log(propsAndChildren);
     const children: Record<string, Block<any>> = {}; // Используем Record для более гибкой типизации
-    // конец
     const props: Partial<Props> = {};
 
     Object.entries(propsAndChildren).forEach(([key, value]) => {
-      if (value instanceof Block) {
-        // Явно приводим тип children, чтобы убрать ошибку
-        children[key] = value as Block<object>;
+      // console.log(value);
+      if (Array.isArray(value)) {
+        // console.log(value);
+        if (value.every((x) => x instanceof Block)) {
+          children[key] = value as Block<object>;
+        }
       } else {
-        props[key as keyof Props] = value;
+        if (value instanceof Block) {
+          children[key] = value as Block<object>;
+        } else {
+          props[key as keyof Props] = value;
+        }
       }
     });
 
@@ -144,7 +159,13 @@ export default class Block<
     const propsAndStubs: Record<string, any> = { ...this.props }; // тут можно только так
     // конец
     Object.entries(this.children).forEach(([key, child]) => {
-      propsAndStubs[key] = `<div data-id="${child._id}"></div>`;
+      if (Array.isArray(child)) {
+        propsAndStubs[key] = child.map(
+          (component) => `<div data-id="${component._id}"></div>`
+        );
+      } else {
+        propsAndStubs[key] = `<div data-id="${child._id}"></div>`;
+      }
     });
 
     const fragment = this._createDocumentElement(
@@ -156,9 +177,17 @@ export default class Block<
     const newElement = fragment.content.firstElementChild as HTMLElement | null;
 
     Object.values(this.children).forEach((child) => {
-      const stub = fragment.content.querySelector(`[data-id="${child._id}"]`);
-
-      stub?.replaceWith(child.getContent()!);
+      if (Array.isArray(child)) {
+        child.forEach((component) => {
+          const stub = fragment.content.querySelector(
+            `[data-id="${component._id}"]`
+          );
+          stub?.replaceWith(component.getContent()!);
+        });
+      } else {
+        const stub = fragment.content.querySelector(`[data-id="${child._id}"]`);
+        stub?.replaceWith(child.getContent()!);
+      }
     });
 
     if (newElement && this._element) {
@@ -175,7 +204,7 @@ export default class Block<
     return "";
   }
 
-  getContent() {
+  getContent(): HTMLElement {
     if (this.element?.parentNode?.nodeType === Node.DOCUMENT_FRAGMENT_NODE) {
       setTimeout(() => {
         if (
@@ -186,7 +215,7 @@ export default class Block<
       }, 100);
     }
 
-    return this._element;
+    return this._element as HTMLElement;
   }
 
   _makePropsProxy(props: Props) {

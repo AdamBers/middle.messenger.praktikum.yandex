@@ -1,4 +1,6 @@
 import Block from "@/core/Block";
+import AuthApi from "@/api/auth";
+
 import {
   Button,
   PageTitle,
@@ -17,6 +19,8 @@ type LoginPageChildren = {
   SignupLink: Link;
   ErrorLine: ErrorLine;
 };
+
+const authApi = new AuthApi();
 
 class LoginPage extends Block<LoginPageProps, LoginPageChildren> {
   constructor(props: LoginPageChildren) {
@@ -52,7 +56,7 @@ class LoginPage extends Block<LoginPageProps, LoginPageChildren> {
         },
       }),
       SignupLink: new Link({
-        url: "/signup",
+        url: "/sign-up",
         text: "Создать",
         page: "signup",
       }),
@@ -63,8 +67,9 @@ class LoginPage extends Block<LoginPageProps, LoginPageChildren> {
     this.children.ErrorLine.setProps({ errorText });
   }
 
-  handleSubmit(event: Event) {
+  async handleSubmit(event: Event) {
     event.preventDefault();
+
     const loginInput = (
       this.children.InputLogin.children.InputField.getContent() as HTMLInputElement
     ).value;
@@ -73,17 +78,43 @@ class LoginPage extends Block<LoginPageProps, LoginPageChildren> {
       this.children.InputPassword.children.InputField.getContent() as HTMLInputElement
     ).value;
 
+    // Валидация данных
     if (validateLogin(loginInput) && validatePassword(passwordInput)) {
       console.log(`login: ${loginInput} password: ${passwordInput}`);
-    } else {
-      console.log("Form is invalid. Show errors.");
-    }
 
-    if (!validateLogin(loginInput)) {
-      this.children.InputLogin.setErrorText("Неверный логин");
-    }
-    if (!validatePassword(passwordInput)) {
-      this.children.InputPassword.setErrorText("Неверный пароль");
+      try {
+        // Запрос авторизации
+        const response = await authApi.signin({
+          login: loginInput,
+          password: passwordInput,
+        });
+        // Проверяем статус ответа
+        if ("status" in response) {
+          console.log(response);
+          if (
+            response?.status === 200 ||
+            response?.reason === "User already in system"
+          ) {
+            console.log(response);
+            window.router.go("/messenger");
+            const currentUser = await authApi.me();
+            console.log(currentUser);
+            window.store.set({ userId: currentUser?.data?.id });
+            window.store.set({ user: currentUser?.data });
+          }
+        }
+      } catch (error) {
+        console.log("Ошибка при входе:", error);
+      }
+    } else {
+      console.log("Форма заполнена неверно. Показываем ошибки.");
+      // Обработка ошибок валидации
+      if (!validateLogin(loginInput)) {
+        this.children.InputLogin.setErrorText("Неверный логин");
+      }
+      if (!validatePassword(passwordInput)) {
+        this.children.InputPassword.setErrorText("Неверный пароль");
+      }
     }
   }
 

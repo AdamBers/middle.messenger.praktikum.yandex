@@ -1,8 +1,13 @@
 .chat-messages {
   width: 100%;
-  padding: 20px 30px;
+  padding: 0 30px 20px 30px;
   height: 100vh;
   overflow-y: scroll;
+
+  .choose-chat {
+    margin-top: 50vh;
+    margin-left: 45%;
+  }
 
   .user {
     width: calc(100% - 375px);
@@ -11,19 +16,11 @@
     justify-content: space-between;
     align-items: center;
     border-bottom: 1px solid #eaeaea;
-    padding-bottom: 10px;
+    padding-bottom: 15px;
+    padding-top: 15px;
+    background-color: #fff;
 
-    .tripple-dots {
-      width: 3px;
-      height: 15px;
-      background: repeating-linear-gradient(
-        to bottom,
-        black,
-        black 3px,
-        transparent 3px,
-        transparent 6px
-      );
-    }
+    
 
     .user-info {
       display: flex;
@@ -44,7 +41,7 @@
 
   .content {
     min-height: 100%;
-    padding: 50px 20px;
+    padding: 70px 20px 50px 20px;
 
     .date {
       font-size: 12px;
@@ -62,7 +59,8 @@
     height: 54px;
     border-top: 1px solid #b8b8b8;
     position: absolute;
-    bottom: 20px;
+    bottom: 0px;
+    background-color: #fff;
 
     .attach-button {
       width: 32px;
@@ -103,3 +101,5 @@
     }
   }
 }
+
+
