@@ -50,14 +50,15 @@ class Modal extends Block<ModalProps, ModalChildren> {
   }
 
   async handleSubmit(e: Event) {
+    console.log(e);
     if (this.children.SearchButton.props.button_text === "Добавить") {
       let errorText = "";
       const inputElement =
-        this.children.SearchBar.children.InputField.getContent();
+        this.children.SearchBar.children.InputField.getContent() as HTMLInputElement;
 
       if (inputElement?.value) {
         const userInfo = await usersApi.searchUser(inputElement?.value);
-        const userIds = userInfo?.data?.map((item) => item.id);
+        const userIds = userInfo?.data?.map((item: any) => item.id);
         const currentChatId = window.store.getState().selectedChat;
         if (userIds?.length) {
           if (userIds?.length > 0 && currentChatId) {
@@ -88,11 +89,11 @@ class Modal extends Block<ModalProps, ModalChildren> {
     if (this.children.SearchButton.props.button_text === "Удалить") {
       let errorText = "";
       const inputElement =
-        this.children.SearchBar.children.InputField.getContent();
+        this.children.SearchBar.children.InputField.getContent() as HTMLInputElement;
 
       if (inputElement?.value) {
         const userInfo = await usersApi.searchUser(inputElement?.value);
-        const userIds = userInfo?.data?.map((item) => item.id);
+        const userIds = userInfo?.data?.map((item: any) => item.id);
         const currentChatId = window.store.getState().selectedChat;
         if (userIds?.length) {
           if (userIds?.length > 0 && currentChatId) {
@@ -122,8 +123,9 @@ class Modal extends Block<ModalProps, ModalChildren> {
 
     if (this.props.buttonText === "Добавить чат") {
       const InputChatElement =
-        this.children.SearchBar.children.InputField.getContent().value;
-      const addChatRequest = await chatsApi.createChat(InputChatElement);
+        this.children.SearchBar.children.InputField.getContent() as HTMLInputElement;
+      const InputChatElementValue = InputChatElement?.value;
+      const addChatRequest = await chatsApi.createChat(InputChatElementValue);
       if (addChatRequest.status === 200) {
         this.children.SearchBar.children.ErrorLine.setProps({
           error: "чат добавлен",

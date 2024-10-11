@@ -10,6 +10,7 @@ type ChatItemProps = {
   id: number; // Идентификатор чата
   selectedChatId: number | null; // Идентификатор выбранного чата
   onChatSelect: (id: number) => void; // Колбэк для выбора чата
+  events?: {};
 };
 
 class ChatItem extends Block<ChatItemProps> {
@@ -24,7 +25,7 @@ class ChatItem extends Block<ChatItemProps> {
 
   render(): string {
     const { selectedChatId, id } = this.props;
-    const isSelected = selectedChatId === id ? 'chat-item__selectedChat' : '';
+    const isSelected = selectedChatId === id ? "chat-item__selectedChat" : "";
 
     return `
       <div class="chat-item ${isSelected}">

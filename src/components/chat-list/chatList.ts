@@ -23,7 +23,7 @@ type ChatListChildren = {
 const chatsAPI = new ChatsAPI();
 
 class ChatList extends Block<ChatListProps, ChatListChildren> {
-  constructor(props: ChatListProps = {}) {
+  constructor(props: ChatListProps) {
     super({
       ...props,
       ProfileLink: new Link({

@@ -4,7 +4,7 @@ import { TResponse } from "./type";
 const chatsAPI = new HTTPTransport("/chats");
 
 export default class ChatsAPI {
-  async getChats(data?: string): Promise<TResponse> {
+  async getChats(): Promise<TResponse> {
     return chatsAPI.get("/");
   }
 

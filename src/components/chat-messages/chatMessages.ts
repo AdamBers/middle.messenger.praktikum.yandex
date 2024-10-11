@@ -6,11 +6,10 @@ import { OutgoingMessage } from "../outgoing-message";
 import { Button } from "../button";
 import { sendMessage } from "@/websocket/websocket";
 import { TrippleDots } from "@/components/tripple-dots";
-import { Modal } from "@/components/modal";
-import { MessageDTO } from "@/api/types";
+// import { MessageDTO } from "@/api/types";
 
 type ChatMessagesProps = {
-  messages: MessageDTO[];
+  messages: any;
   userId: number;
   chatTitle: string;
   renderedMessages?: string;

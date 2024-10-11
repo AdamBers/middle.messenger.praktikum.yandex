@@ -3,10 +3,10 @@ export type APIError = {
 };
 
 export type TResponse = {
-  status: number;
+  status?: number;
   id?: number;
   reason?: string;
-  data?: Array<Record<string, any>>;
+  data?: any;
 };
 
 export type UserDTO = {
@@ -15,7 +15,7 @@ export type UserDTO = {
   first_name: string;
   second_name: string;
   display_name: string;
-  avatar: string;
+  avatar?: string;
   phone: string;
   email: string;
 };

@@ -1,4 +1,3 @@
-// import Handlebars from "handlebars";
 import * as Pages from "./pages";
 import { Store } from "./core/Store";
 import Router from "./core/Router";
