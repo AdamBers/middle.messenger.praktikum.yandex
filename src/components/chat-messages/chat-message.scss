@@ -1,6 +1,6 @@
 .chat-messages {
   width: 100%;
-  padding: 0 30px 20px 30px;
+  padding: 0 30px 20px;
   height: 100vh;
   overflow-y: scroll;
 
@@ -41,7 +41,7 @@
 
   .content {
     min-height: 100%;
-    padding: 70px 20px 50px 20px;
+    padding: 70px 20px 50px;
 
     .date {
       font-size: 12px;
@@ -59,7 +59,7 @@
     height: 54px;
     border-top: 1px solid #b8b8b8;
     position: absolute;
-    bottom: 0px;
+    bottom: 0;
     background-color: #fff;
 
     .attach-button {
