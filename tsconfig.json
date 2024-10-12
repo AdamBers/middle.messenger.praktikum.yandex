@@ -2,6 +2,7 @@
   "compilerOptions": {
     "rootDir": "./src",
     "outDir": "./dist",
+    "noEmit": false,
     "baseUrl": "./",
     "paths": {
       "@/*": ["src/*"]
@@ -23,6 +24,6 @@
     "strictNullChecks": true,
     "noFallthroughCasesInSwitch": true
   },
-  "include": ["src"],
+  "include": ["src", "src/server.ts"],
   "exclude": ["node_modules"]
 }
