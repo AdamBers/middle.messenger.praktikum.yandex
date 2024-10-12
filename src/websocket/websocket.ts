@@ -7,9 +7,9 @@ let pingInterval: NodeJS.Timeout | null = null;
 
 export function connectWebSocket() {
   return new Promise<WebSocket>((resolve, reject) => {
-    const currentUser = window.store.state.userId; // Извлекаем userId из store
-    const currentChat = window.store.state.selectedChat; // Извлекаем выбранный чат
-    const currentToken = window.store.state.wsToken; // Токен должен быть уже в store
+    const currentUser = window.store.getState().userId; // Извлекаем userId из store
+    const currentChat = window.store.getState().selectedChat; // Извлекаем выбранный чат
+    const currentToken = window.store.getState().wsToken; // Токен должен быть уже в store
 
     if (!currentUser || !currentChat || !currentToken) {
       console.log("Недостаточно данных для установки WebSocket-соединения");
@@ -30,7 +30,11 @@ export function connectWebSocket() {
           console.log("Ping отправлен");
         }
       }, 30000); // Интервал в миллисекундах (30 секунд)
-      resolve(socket);
+      if (socket) {
+        resolve(socket);
+      } else {
+        reject;
+      }
     });
 
     socket.addEventListener("close", (event) => {

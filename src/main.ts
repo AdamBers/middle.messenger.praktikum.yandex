@@ -1,8 +1,8 @@
 import * as Pages from "./pages";
 import { Store } from "./core/Store";
 import Router from "./core/Router";
-import { LoadChats } from "./services/LoadChats";
 import AuthApi from "./api/auth";
+import { LoadChats } from "./services/LoadChats";
 import "./style.scss";
 
 declare global {
@@ -17,9 +17,12 @@ declare global {
 const authAPI = new AuthApi();
 
 const Me = await authAPI.me();
-const CurrentUserId = Me?.data?.id;
-const userName = Me?.data?.first_name;
-// console.log(Me);
+let CurrentUserId: number | null = null;
+let userName: string | null = null;
+if ("data" in Me) {
+  CurrentUserId = Me?.data?.id;
+  userName = Me?.data?.first_name;
+}
 
 const store = new Store({
   isLoading: false,
@@ -36,6 +39,8 @@ window.store = store;
 const router = new Router("#app");
 window.router = router;
 
+LoadChats();
+
 router
   .use("/", Pages.LoginPage)
   .use("/sign-up", Pages.SignupPage)
@@ -49,4 +54,3 @@ if (CurrentUserId === null || !CurrentUserId) {
   window.router.go("/");
   console.log("Not authorized");
 }
-LoadChats();

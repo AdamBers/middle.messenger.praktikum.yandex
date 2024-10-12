@@ -1,39 +1,46 @@
 import { StoreEvents } from "../core/Store";
 import isEqual from "./isEqual";
 
-export function connect(mapStateToProps, dispatch?) {
-  return function (Component) {
+export function connect(mapStateToProps: (state: any) => { [key: string]: any }, dispatch?: { [key: string]: (dispatch: Function, ...args: any[]) => void }) {
+  return function (Component: any) {
     return class extends Component {
       private onChangeStoreCallback: () => void;
-      constructor(props) {
+      private state: any; // Хранит текущее состояние
+
+      constructor(props: any) {
         const store = window.store;
-        // сохраняем начальное состояние
-        let state = mapStateToProps(store.getState());
 
-        super({ ...props, ...state });
+        // Получаем начальное состояние
+        const initialState = mapStateToProps(store.getState());
 
-        const dispatchHundler = {};
-        Object.entries(dispatch || {}).forEach(([key, hundler]) => {
-          dispatchHundler[key] = (...args) =>
-            hundler(window.store.set.bind(window.store), ...args);
+        // Вызов родительского конструктора
+        super({ ...props, ...initialState });
+
+        // Сохраняем состояние
+        this.state = initialState;
+
+        // Создаем обработчики для dispatch
+        const dispatchHandlers: { [key: string]: Function } = {};
+        Object.entries(dispatch || {}).forEach(([key, handler]) => {
+          dispatchHandlers[key] = (...args: any[]) =>
+            handler(window.store.set.bind(window.store), ...args);
         });
 
-        this.setProps({ ...dispatchHundler });
+        this.setProps({ ...dispatchHandlers });
 
+        // Создаем callback для обновления состояния
         this.onChangeStoreCallback = () => {
-          // при обновлении получаем новое состояние
+          // При обновлении получаем новое состояние
           const newState = mapStateToProps(store.getState());
 
-          // если что-то из используемых данных поменялось, обновляем компонент
-          if (!isEqual(state, newState)) {
+          // Если что-то из используемых данных поменялось, обновляем компонент
+          if (!isEqual(this.state, newState)) {
             this.setProps({ ...newState });
+            this.state = newState; // Обновляем состояние
           }
-
-          // не забываем сохранить новое состояние
-          state = newState;
         };
 
-        // подписываемся на событие
+        // Подписываемся на событие
         store.on(StoreEvents.Updated, this.onChangeStoreCallback);
       }
 

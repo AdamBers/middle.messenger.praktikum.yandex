@@ -112,7 +112,7 @@ class SignupPage extends Block<SignupPageProps, SignupPageChildren> {
     ];
 
     let areAllValid = true;
-    const userData: { [key: string]: string } = {};
+    const userData: any = {};
 
     for (const child of childrenToCheck) {
       // Вызов handleBlur для валидации поля

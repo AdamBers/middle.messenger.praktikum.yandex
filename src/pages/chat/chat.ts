@@ -2,19 +2,20 @@ import Block from "@/core/Block";
 import { ChatList, ChatMessages } from "../../components";
 
 type ChatPageProps = {
-  activeChatId: number | null;
+  // activeChatId: number | null;
 };
+
 type ChatPageChildren = {
-  ChatList: ChatList;
-  ChatMessages: ChatMessages;
+  // Указываем тип как экземпляр класса ChatMessages
 };
+
 class ChatPage extends Block<ChatPageProps, ChatPageChildren> {
   constructor(props: ChatPageProps) {
     super({
       ...props,
-      activeChatId: null,
-      ChatList: new ChatList({}),
-      ChatMessages: new ChatMessages({}),
+      // activeChatId: null,
+      ChatList: new ChatList({}), // Передаем экземпляр класса
+      ChatMessages: new ChatMessages({}), // Передаем экземпляр класса
     });
   }
 

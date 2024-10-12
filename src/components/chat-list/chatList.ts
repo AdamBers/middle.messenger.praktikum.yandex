@@ -12,13 +12,10 @@ import { ChatDTO } from "@/api/type";
 type ChatListProps = {
   chats?: ChatDTO[];
   selectedChatId?: number | null;
+  chatItems?: ChatItem[];
 };
 
-type ChatListChildren = {
-  chatItems?: ChatItem[];
-  ProfileLink: Link;
-  AddChat: AddChat;
-};
+type ChatListChildren = any;
 // const authApi = new AuthApi();
 const chatsAPI = new ChatsAPI();
 

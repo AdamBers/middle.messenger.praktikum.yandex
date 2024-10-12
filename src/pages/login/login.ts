@@ -1,13 +1,7 @@
 import Block from "@/core/Block";
 import AuthApi from "@/api/auth";
 
-import {
-  Button,
-  PageTitle,
-  InputBlock,
-  Link,
-  ErrorLine,
-} from "../../components";
+import { Button, PageTitle, InputBlock, Link } from "../../components";
 import { validateLogin, validatePassword } from "../../utils/validation";
 
 type LoginPageProps = {};
@@ -17,13 +11,12 @@ type LoginPageChildren = {
   InputPassword: InputBlock;
   ButtonLogin: Button;
   SignupLink: Link;
-  ErrorLine: ErrorLine;
 };
 
 const authApi = new AuthApi();
 
 class LoginPage extends Block<LoginPageProps, LoginPageChildren> {
-  constructor(props: LoginPageChildren) {
+  constructor(props: LoginPageProps) {
     super({
       ...props,
       TitleOfPage: new PageTitle({
@@ -63,10 +56,6 @@ class LoginPage extends Block<LoginPageProps, LoginPageChildren> {
     });
   }
 
-  setErrorText(errorText: string) {
-    this.children.ErrorLine.setProps({ errorText });
-  }
-
   async handleSubmit(event: Event) {
     event.preventDefault();
 
@@ -99,8 +88,10 @@ class LoginPage extends Block<LoginPageProps, LoginPageChildren> {
             window.router.go("/messenger");
             const currentUser = await authApi.me();
             console.log(currentUser);
-            window.store.set({ userId: currentUser?.data?.id });
-            window.store.set({ user: currentUser?.data });
+            if ("data" in currentUser) {
+              window.store.set({ userId: currentUser?.data?.id });
+              window.store.set({ user: currentUser?.data });
+            }
           }
         }
       } catch (error) {
@@ -110,10 +101,14 @@ class LoginPage extends Block<LoginPageProps, LoginPageChildren> {
       console.log("Форма заполнена неверно. Показываем ошибки.");
       // Обработка ошибок валидации
       if (!validateLogin(loginInput)) {
-        this.children.InputLogin.setErrorText("Неверный логин");
+        this.children.InputLogin.children.ErrorLine.setProps({
+          errorText: "Неверный логин",
+        });
       }
       if (!validatePassword(passwordInput)) {
-        this.children.InputPassword.setErrorText("Неверный пароль");
+        this.children.InputPassword.children.ErrorLine.setProps({
+          errorText: "Неверный пароль",
+        });
       }
     }
   }

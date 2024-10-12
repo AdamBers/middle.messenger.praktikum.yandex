@@ -83,7 +83,7 @@ class ChatMessages extends Block<ChatMessagesProps, ChatMessagesChildren> {
     return messages
       .slice()
       .reverse()
-      .map((message) => {
+      .map((message: any) => {
         if (message.user_id === userId) {
           return new OutgoingMessage({
             message: message.content,

@@ -3,10 +3,11 @@ import AuthApi from "@/api/auth";
 import UsersAPI from "@/api/user";
 import { InputBlock, Button, Link } from "../../components";
 import { connect } from "@/utils/connect"; // Импортируем функцию connect
-import { UserDTO } from "@/api/types"; // Импортируем тип UserDTO
+// import { UserDTO } from "@/api/type"; // Импортируем тип UserDTO
 
 type UserSettingsPageProps = {
-  user: UserDTO; // Добавляем типизацию для пользователя
+  // user: UserDTO; // Добавляем типизацию для пользователя
+  user?: any;
 };
 
 type UserSettingsPageChildren = {
@@ -38,7 +39,7 @@ class UserSettingsPage extends Block<
         id: "email",
         name: "email",
         label: "email",
-        placeholder: props?.user?.email || "",
+        // placeholder: props?.user?.email || "",
         value: props?.user?.email || "",
       }),
       InputLogin: new InputBlock({
@@ -49,7 +50,7 @@ class UserSettingsPage extends Block<
         label: "Логин",
         label_text: "Логин",
         // placeholder: "",
-        placeholder: props.user?.login || "", // Установка начального значения
+        value: props.user?.login || "", // Установка начального значения
       }),
       InputFirstName: new InputBlock({
         label_text: "Имя",
@@ -59,7 +60,7 @@ class UserSettingsPage extends Block<
         id: "first_name",
         name: "first_name",
         // placeholder: "",
-        placeholder: props.user?.first_name || "", // Установка начального значения
+        value: props.user?.first_name || "", // Установка начального значения
       }),
       InputSecondName: new InputBlock({
         label_for: "second_name",
@@ -69,7 +70,7 @@ class UserSettingsPage extends Block<
         id: "second_name",
         name: "second_name",
         // placeholder: "",
-        placeholder: props.user?.second_name || "", // Установка начального значения
+        value: props.user?.second_name || "", // Установка начального значения
       }),
       InputDisplayName: new InputBlock({
         label_for: "display_name",
@@ -79,7 +80,7 @@ class UserSettingsPage extends Block<
         id: "display_name",
         name: "display_name",
         // placeholder: "",
-        placeholder: props.user?.display_name || "", // Установка начального значения
+        value: props.user?.display_name || "", // Установка начального значения
       }),
       InputPhone: new InputBlock({
         label_for: "phone",
@@ -89,7 +90,7 @@ class UserSettingsPage extends Block<
         id: "phone",
         name: "phone",
         // placeholder: "",
-        placeholder: props.user?.phone || "",
+        value: props.user?.phone || "",
       }),
       // InputOldPassword: new InputBlock({
       //   type: "password",
@@ -180,38 +181,38 @@ class UserSettingsPage extends Block<
     const Me = await authAPI.me();
 
     // Обновляем store с данными пользователя
-    window.store.set({ user: Me?.data });
-
-    // Обновляем prop с данными пользователя
-    this.setProps({
-      user: Me?.data,
-    });
-    // Обновляем значения в InputBlock компонентах
-    this.children.InputEmail.children.InputField.setProps({
-      placeholder: Me?.data?.email,
-    });
-    this.children.InputLogin.children.InputField.setProps({
-      placeholder: Me?.data?.login,
-    });
-    this.children.InputFirstName.children.InputField.setProps({
-      placeholder: Me?.data?.first_name,
-    });
-    this.children.InputSecondName.children.InputField.setProps({
-      placeholder: Me?.data?.second_name,
-    });
-    this.children.InputDisplayName.children.InputField.setProps({
-      placeholder: Me?.data?.display_name,
-    });
-    this.children.InputPhone.children.InputField.setProps({
-      placeholder: Me?.data?.phone,
-    });
+    if ("data" in Me) {
+      window.store.set({ user: Me?.data });
+      this.setProps({
+        user: Me?.data,
+      });
+      // Обновляем значения в InputBlock компонентах
+      this.children.InputEmail.children.InputField.setProps({
+        placeholder: Me?.data?.email,
+      });
+      this.children.InputLogin.children.InputField.setProps({
+        placeholder: Me?.data?.login,
+      });
+      this.children.InputFirstName.children.InputField.setProps({
+        placeholder: Me?.data?.first_name,
+      });
+      this.children.InputSecondName.children.InputField.setProps({
+        placeholder: Me?.data?.second_name,
+      });
+      this.children.InputDisplayName.children.InputField.setProps({
+        placeholder: Me?.data?.display_name,
+      });
+      this.children.InputPhone.children.InputField.setProps({
+        placeholder: Me?.data?.phone,
+      });
+    }
   }
 
   componentDidUpdate(
     oldProps: UserSettingsPageProps,
     newProps: UserSettingsPageProps
   ): boolean {
-    if (oldProps.user !== newProps.user) {
+    if (JSON.stringify(oldProps.user) !== JSON.stringify(newProps.user)) {
       this.children.InputEmail.children.InputField.setProps({
         value: newProps.user.email,
       });
@@ -273,7 +274,7 @@ class UserSettingsPage extends Block<
 // {{{InputNewPassword}}}
 // Функция для подключения к store
 const mapStateToProps = (state: any) => ({
-  user: state.user, // Извлекаем пользователя из состояния
+  user: state.user || {}, // Извлекаем пользователя из состояния
 });
 
 export default connect(mapStateToProps)(UserSettingsPage); // Экспортируем компонент, подключенный к store
