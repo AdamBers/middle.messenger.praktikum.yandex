@@ -100,7 +100,7 @@ export default class Block<
   }
 
   componentDidMount(_oldProps: Props) {
-    console.log(_oldProps);
+    // console.log(_oldProps);
   }
   // componentDidMount() {}
 
@@ -117,7 +117,7 @@ export default class Block<
   }
 
   componentDidUpdate(_oldProps: Props, _newProps: Props) {
-    console.log(_oldProps, _newProps);
+    // console.log(_oldProps, _newProps);
     return true;
   }
   // componentDidUpdate() {

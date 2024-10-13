@@ -177,9 +177,9 @@ class UserSettingsPage extends Block<
   }
 
   async componentDidMount(): Promise<void> {
+    // console.log("Mounted");
     const authAPI = new AuthApi();
     const Me = await authAPI.me();
-
     // Обновляем store с данными пользователя
     if ("data" in Me) {
       window.store.set({ user: Me?.data });
@@ -212,6 +212,8 @@ class UserSettingsPage extends Block<
     oldProps: UserSettingsPageProps,
     newProps: UserSettingsPageProps
   ): boolean {
+    // console.log("Updated");
+
     if (JSON.stringify(oldProps.user) !== JSON.stringify(newProps.user)) {
       this.children.InputEmail.children.InputField.setProps({
         value: newProps.user.email,

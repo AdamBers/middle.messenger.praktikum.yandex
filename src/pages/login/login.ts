@@ -1,5 +1,6 @@
 import Block from "@/core/Block";
 import AuthApi from "@/api/auth";
+import { goToMessagesIfAuthorized } from "@/utils/goToMessagesIfAuthorized";
 
 import { Button, PageTitle, InputBlock, Link } from "../../components";
 import { validateLogin, validatePassword } from "../../utils/validation";
@@ -79,10 +80,9 @@ class LoginPage extends Block<LoginPageProps, LoginPageChildren> {
         });
         // Проверяем статус ответа
         if ("status" in response) {
-          console.log(response);
           if (
             response?.status === 200 ||
-            response?.reason === "User already in system"
+            response?.data?.reason === "User already in system"
           ) {
             console.log(response);
             window.router.go("/messenger");
@@ -111,6 +111,9 @@ class LoginPage extends Block<LoginPageProps, LoginPageChildren> {
         });
       }
     }
+  }
+  componentDidMount(_oldProps: LoginPageProps): void {
+    goToMessagesIfAuthorized();
   }
 
   render() {

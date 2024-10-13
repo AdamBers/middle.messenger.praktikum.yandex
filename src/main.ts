@@ -39,7 +39,7 @@ window.store = store;
 const router = new Router("#app");
 window.router = router;
 
-LoadChats();
+// await LoadChats();
 
 router
   .use("/", Pages.LoginPage)

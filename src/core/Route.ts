@@ -8,7 +8,8 @@ interface RouteProps {
   rootQuery: string;
 }
 
-type BlockClass<T extends Record<string, unknown> = Record<string, unknown>> = new (props: T) => Block;
+type BlockClass<T extends Record<string, unknown> = Record<string, unknown>> =
+  new (props: T) => Block;
 
 class Route {
   private _pathname: string;
@@ -34,9 +35,20 @@ class Route {
     }
   }
 
+  // leave(): void {
+  //   if (this._block) {
+  //     this._block.hide();
+  //   }
+  // }
+
   leave(): void {
     if (this._block) {
       this._block.hide();
+      const root = document.querySelector(this._props.rootQuery);
+      if (root) {
+        root.removeChild(this._block.getContent());
+      }
+      this._block = null; // Сбрасываем ссылку на блок
     }
   }
 
@@ -51,6 +63,22 @@ class Route {
     }
   }
 
+  // render(): void {
+  //   if (!this._block) {
+  //     this._block = new this._blockClass({});
+  //     const content = this._block.getContent() as HTMLElement;
+
+  //     if (!content) {
+  //       console.error("Block content is null");
+  //       return;
+  //     }
+
+  //     this._renderDom(this._props.rootQuery, this._block);
+  //     return;
+  //   }
+
+  //   this._block.show();
+  // }
   render(): void {
     if (!this._block) {
       this._block = new this._blockClass({});

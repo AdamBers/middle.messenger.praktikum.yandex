@@ -1,6 +1,7 @@
 import Block from "@/core/Block";
 import { PageTitle, InputBlock, Button, Link } from "../../components";
 import AuthApi from "@/api/auth";
+import { goToMessagesIfAuthorized } from "@/utils/goToMessagesIfAuthorized";
 
 type SignupPageProps = {};
 type SignupPageChildren = {
@@ -115,7 +116,6 @@ class SignupPage extends Block<SignupPageProps, SignupPageChildren> {
     const userData: any = {};
 
     for (const child of childrenToCheck) {
-      // Вызов handleBlur для валидации поля
       child.handleBlur();
 
       const inputElement =
@@ -145,6 +145,10 @@ class SignupPage extends Block<SignupPageProps, SignupPageChildren> {
     } else {
       console.log("Не все поля заполнены верно.");
     }
+  }
+
+  componentDidMount(_oldProps: SignupPageProps): void {
+    goToMessagesIfAuthorized();
   }
   render() {
     return `

@@ -6,7 +6,7 @@ import { connectWebSocket } from "@/websocket/websocket";
 import { ChatItem } from "../chat-item";
 import { AddChat } from "../add-chat";
 import { connect } from "@/utils/connect";
-
+import { LoadChats } from "@/services/LoadChats";
 import { ChatDTO } from "@/api/type";
 
 type ChatListProps = {
@@ -32,23 +32,16 @@ class ChatList extends Block<ChatListProps, ChatListChildren> {
     });
   }
 
-  componentDidMount(): void {}
-
-  async onChatSelect(id: number, title: string) {
-    // Сохраняем выбранный чат в глобальном store
-    window.store.set({ selectedChat: id });
-    window.store.set({ chatTitle: title });
-    const requestToken = await chatsAPI.getToken(id);
-    const currentToken = requestToken.data?.token;
-    window.store.set({ wsToken: currentToken });
-    await connectWebSocket();
-    getOldMessages("0");
+  async componentDidMount() {
+    console.log("didmount");
+    LoadChats();
   }
 
   componentDidUpdate(
     oldProps: ChatListProps,
     newProps: ChatListProps
   ): boolean {
+    console.log("updated");
     if (
       oldProps.chats !== newProps.chats ||
       oldProps.selectedChatId !== newProps.selectedChatId
@@ -77,7 +70,19 @@ class ChatList extends Block<ChatListProps, ChatListChildren> {
     return false;
   }
 
+  async onChatSelect(id: number, title: string) {
+    // Сохраняем выбранный чат в глобальном store
+    window.store.set({ selectedChat: id });
+    window.store.set({ chatTitle: title });
+    const requestToken = await chatsAPI.getToken(id);
+    const currentToken = requestToken.data?.token;
+    window.store.set({ wsToken: currentToken });
+    await connectWebSocket();
+    getOldMessages("0");
+  }
+
   render(): string {
+    console.log(this.props.chatItems);
     return `
       <div class="chat-list">
       {{{AddChat}}}

@@ -22,14 +22,16 @@ class Link extends Block<LinkProps> {
 
   onClick(event: Event) {
     event.preventDefault();
-    if (window.router) {
-      window.router.go(this.props.url);
+    const target = event.currentTarget as HTMLElement;
+    const url = target.dataset.url;
+    if (window.router && url) {
+      window.router.go(url);
     }
   }
 
   render(): string {
     return `
-      <a href="{{ url }}" class="link{{#if className}} {{className}}{{/if}}" page="{{ page }}">
+      <a class="link{{#if className}} {{className}}{{/if}}" data-url="{{ url }}" page="{{ page }}">
         {{ text }}
       </a>
     `;
