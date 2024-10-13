@@ -99,8 +99,10 @@ export default class Block<
     });
   }
 
-  // componentDidMount(_oldProps: Props) {}
-  componentDidMount() {}
+  componentDidMount(_oldProps: Props) {
+    console.log(_oldProps);
+  }
+  // componentDidMount() {}
 
   dispatchComponentDidMount() {
     this.eventBus().emit(Block.EVENTS.FLOW_CDM);
@@ -114,12 +116,13 @@ export default class Block<
     this._render();
   }
 
-  // componentDidUpdate(_oldProps: Props, _newProps: Props) {
-  //   return true;
-  // }
-  componentDidUpdate() {
+  componentDidUpdate(_oldProps: Props, _newProps: Props) {
+    console.log(_oldProps, _newProps);
     return true;
   }
+  // componentDidUpdate() {
+  //   return true;
+  // }
 
   _getChildrenAndProps(propsAndChildren: Props & Children) {
     // console.log(propsAndChildren);
