@@ -34,7 +34,7 @@
 Реализована регистрация, авторизация пользователей.
 Для работы с real-time сообщениями используется WebSocket.
 
-Ссылка на проект в Netlify:
+Ссылка на проект в Netlify 3-го спринта:
 "https://middle-messenger-praktikum-yandex-adm.netlify.app/"
 
 Если у вас есть вопросы, свяжитесь с нами по адресу - adambers2020@gmail.com

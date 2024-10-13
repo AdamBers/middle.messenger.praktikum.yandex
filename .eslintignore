@@ -3,3 +3,4 @@
 /node_modules
 eslint.config.js
 stylelint.config.js
+types/declarations.d.ts

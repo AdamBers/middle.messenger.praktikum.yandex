@@ -3,7 +3,7 @@
 let socket: WebSocket | null = null;
 
 // Объявим переменную для хранения идентификатора интервала
-let pingInterval: NodeJS.Timeout | null = null;
+let pingInterval: any;
 
 export function connectWebSocket() {
   return new Promise<WebSocket>((resolve, reject) => {
