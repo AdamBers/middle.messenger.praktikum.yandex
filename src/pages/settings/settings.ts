@@ -1,16 +1,17 @@
 import Block from "@/core/Block";
 import AuthApi from "@/api/auth";
 import UsersAPI from "@/api/user";
-import { InputBlock, Button, Link } from "../../components";
+import { InputBlock, Button, Link, ChangePassword } from "../../components";
 import { connect } from "@/utils/connect"; // Импортируем функцию connect
 // import { UserDTO } from "@/api/type"; // Импортируем тип UserDTO
 
-type UserSettingsPageProps = {
+type SettingsPageProps = {
   // user: UserDTO; // Добавляем типизацию для пользователя
   user?: any;
+  isPasswordChangeMode: boolean;
 };
 
-type UserSettingsPageChildren = {
+type SettingsPageChildren = {
   InputEmail: InputBlock;
   InputLogin: InputBlock;
   InputFirstName: InputBlock;
@@ -20,16 +21,18 @@ type UserSettingsPageChildren = {
   // InputOldPassword: InputBlock;
   // InputNewPassword: InputBlock;
   SubmitButton: Button;
+  LogoutButton: Button;
   BackHomeLink: Link;
+  ChangeUserInfo: Button;
+  ChangeUserPassword: Button;
+  ChangePassword: ChangePassword;
+  BackSettingsLink: Button;
 };
 
 const userApi = new UsersAPI();
 
-class UserSettingsPage extends Block<
-  UserSettingsPageProps,
-  UserSettingsPageChildren
-> {
-  constructor(props: UserSettingsPageProps) {
+class SettingsPage extends Block<SettingsPageProps, SettingsPageChildren> {
+  constructor(props: SettingsPageProps) {
     super({
       ...props,
       InputEmail: new InputBlock({
@@ -92,24 +95,21 @@ class UserSettingsPage extends Block<
         // placeholder: "",
         value: props.user?.phone || "",
       }),
-      // InputOldPassword: new InputBlock({
-      //   type: "password",
-      //   id: "oldPassword",
-      //   name: "oldPassword",
-      //   label_for: "oldPassword",
-      //   label_text: "Старый пароль",
-      //   label: "oldPassword",
-      //   placeholder: "",
-      // }),
-      // InputNewPassword: new InputBlock({
-      //   type: "password",
-      //   id: "newPassword",
-      //   name: "newPassword",
-      //   label_for: "newPassword",
-      //   label_text: "Новый пароль",
-      //   label: "newPassword",
-      //   placeholder: "",
-      // }),
+
+      ChangeUserInfo: new Button({
+        button_text: "Изменить данные",
+        type: "button",
+        events: {
+          click: () => this.handleChangeInfo(),
+        },
+      }),
+      ChangeUserPassword: new Button({
+        button_text: "Изменить пароль",
+        type: "button",
+        events: {
+          click: () => this.handleChangePassword(),
+        },
+      }),
       SubmitButton: new Button({
         button_text: "Сохранить",
         type: "submit",
@@ -117,11 +117,27 @@ class UserSettingsPage extends Block<
           click: (event: Event) => this.handleSubmit(event),
         },
       }),
+      LogoutButton: new Button({
+        button_text: "Выйти",
+        type: "button",
+        events: {
+          click: () => this.handleLogout(),
+        },
+      }),
       BackHomeLink: new Link({
         url: "/messenger",
         text: "",
         page: "messenger",
       }),
+      BackSettingsLink: new Button({
+        button_text: "<",
+        type: "button",
+        events: {
+          click: () => this.handleBack(),
+        },
+      }),
+      ChangePassword: new ChangePassword({}),
+      isPasswordChangeMode: false,
     });
   }
 
@@ -164,6 +180,10 @@ class UserSettingsPage extends Block<
       return null; // Возвращаем null, если не все поля валидны
     }
   }
+  handleBack() {
+    console.log("this.props.isPasswordChangeMode");
+    this.setProps({ isPasswordChangeMode: false });
+  }
 
   handleSubmit(e: Event) {
     e.preventDefault();
@@ -174,6 +194,17 @@ class UserSettingsPage extends Block<
       userApi.updateProfile(userData);
       this.setProps({});
     }
+  }
+  handleChangeInfo() {}
+  handleChangePassword() {
+    this.setProps({ isPasswordChangeMode: true });
+    console.log(this.props.isPasswordChangeMode);
+  }
+
+  async handleLogout() {
+    const authApi = new AuthApi();
+    await authApi.logout();
+    window.router.go("/");
   }
 
   async componentDidMount(): Promise<void> {
@@ -188,57 +219,38 @@ class UserSettingsPage extends Block<
       });
       // Обновляем значения в InputBlock компонентах
       this.children.InputEmail.children.InputField.setProps({
-        placeholder: Me?.data?.email,
+        // placeholder: Me?.data?.email,
+        value: Me?.data?.email,
       });
       this.children.InputLogin.children.InputField.setProps({
-        placeholder: Me?.data?.login,
+        value: Me?.data?.login,
       });
       this.children.InputFirstName.children.InputField.setProps({
-        placeholder: Me?.data?.first_name,
+        value: Me?.data?.first_name,
       });
       this.children.InputSecondName.children.InputField.setProps({
-        placeholder: Me?.data?.second_name,
+        value: Me?.data?.second_name,
       });
       this.children.InputDisplayName.children.InputField.setProps({
-        placeholder: Me?.data?.display_name,
+        value: Me?.data?.display_name,
       });
       this.children.InputPhone.children.InputField.setProps({
-        placeholder: Me?.data?.phone,
+        value: Me?.data?.phone,
       });
     }
-  }
-
-  componentDidUpdate(
-    oldProps: UserSettingsPageProps,
-    newProps: UserSettingsPageProps
-  ): boolean {
-    // console.log("Updated");
-
-    if (JSON.stringify(oldProps.user) !== JSON.stringify(newProps.user)) {
-      this.children.InputEmail.children.InputField.setProps({
-        value: newProps.user.email,
-      });
-      this.children.InputLogin.children.InputField.setProps({
-        value: newProps.user.login,
-      });
-      this.children.InputFirstName.children.InputField.setProps({
-        value: newProps.user.first_name,
-      });
-      this.children.InputSecondName.children.InputField.setProps({
-        value: newProps.user.second_name,
-      });
-      this.children.InputDisplayName.children.InputField.setProps({
-        value: newProps.user.display_name,
-      });
-      this.children.InputPhone.children.InputField.setProps({
-        value: newProps.user.phone,
-      });
-      return true;
-    }
-    return false;
   }
 
   render() {
+    if (this.props.isPasswordChangeMode === true) {
+      return `<div class="user-container">
+                <div class="button-back">
+                  {{{BackSettingsLink}}}
+                </div>
+              <div class="content user-settings">
+                {{{ChangePassword}}}
+              </div>`;
+    }
+
     return `
       <div class="user-container">
         <div class="button-back">
@@ -264,7 +276,11 @@ class UserSettingsPage extends Block<
               {{{InputLogin}}}
               {{{InputEmail}}}
               {{{InputPhone}}}
-              {{{SubmitButton}}}
+              <div class="user-edit">
+                {{{ChangeUserInfo}}}
+                {{{ChangeUserPassword}}}
+                {{{LogoutButton}}}
+              </div>
             </div>
           </form>
         </div>
@@ -279,4 +295,4 @@ const mapStateToProps = (state: any) => ({
   user: state.user || {}, // Извлекаем пользователя из состояния
 });
 
-export default connect(mapStateToProps)(UserSettingsPage); // Экспортируем компонент, подключенный к store
+export default connect(mapStateToProps)(SettingsPage); // Экспортируем компонент, подключенный к store

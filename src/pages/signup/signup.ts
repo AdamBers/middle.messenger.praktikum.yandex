@@ -132,13 +132,14 @@ class SignupPage extends Block<SignupPageProps, SignupPageChildren> {
     if (areAllValid) {
       try {
         // Используем API для регистрации
+        const loggingOut = await authApi.logout();
+        console.log(loggingOut);
         const response = await authApi.create(userData);
 
-        if ("id" in response) {
+        if ("id" in response?.data) {
           console.log("Успешная регистрация:", response);
           window.router.go("/messenger");
         }
-        console.log(response);
       } catch (error) {
         console.log("Ошибка при регистрации:", error);
       }

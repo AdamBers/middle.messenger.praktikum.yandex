@@ -6,6 +6,7 @@ export async function goToMessagesIfAuthorized() {
   console.log(isAuthorized);
 
   if ("status" in isAuthorized && isAuthorized.status === 200) {
+    console.log("success");
     window.router.go("/messenger");
   }
 }

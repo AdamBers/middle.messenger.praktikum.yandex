@@ -12,3 +12,4 @@ export { ErrorLine } from "./input-block";
 export { TrippleDots } from "./tripple-dots";
 export { Modal } from "./modal";
 export { AddChat } from "./add-chat";
+export { ChangePassword } from "./changePassword";

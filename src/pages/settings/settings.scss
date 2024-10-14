@@ -24,6 +24,9 @@
     background-repeat: no-repeat;
     background-position: center;
     cursor: pointer;
+    button {
+      margin-top: 48vh;
+    }
 
     a {
       min-height: 100vh;
@@ -76,5 +79,13 @@
 
   .user-settings form {
     width: 500px;
+  }
+  .user-edit {
+    display: flex;
+    flex-direction: column;
+    button {
+      margin-bottom: 10px;
+      width: 250px;
+    }
   }
 }

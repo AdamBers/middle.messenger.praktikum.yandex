@@ -45,12 +45,14 @@ router
   .use("/", Pages.LoginPage)
   .use("/sign-up", Pages.SignupPage)
   .use("/messenger", Pages.ChatPage)
-  .use("/settings", Pages.UserSettingsPage)
+  .use("/settings", Pages.SettingsPage)
   .use("/404", Pages.NotFoundPage)
   .use("/500", Pages.ServerErrorPage)
   .start();
 
 if (CurrentUserId === null || !CurrentUserId) {
-  window.router.go("/");
-  console.log("Not authorized");
+  if (window.location.pathname !== "/sign-up") {
+    window.router.go("/");
+    console.log("Not authorized");
+  }
 }

@@ -34,7 +34,7 @@ class ChatList extends Block<ChatListProps, ChatListChildren> {
 
   async componentDidMount() {
     console.log("didmount");
-    LoadChats();
+    await LoadChats();
   }
 
   componentDidUpdate(
