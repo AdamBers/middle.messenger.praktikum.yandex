@@ -18,8 +18,6 @@ type SettingsPageChildren = {
   InputSecondName: InputBlock;
   InputDisplayName: InputBlock;
   InputPhone: InputBlock;
-  // InputOldPassword: InputBlock;
-  // InputNewPassword: InputBlock;
   SubmitButton: Button;
   LogoutButton: Button;
   BackHomeLink: Link;
@@ -27,6 +25,7 @@ type SettingsPageChildren = {
   ChangeUserPassword: Button;
   ChangePassword: ChangePassword;
   BackSettingsLink: Button;
+  ChangeAvatarButton: Button;
 };
 
 const userApi = new UsersAPI();
@@ -42,7 +41,6 @@ class SettingsPage extends Block<SettingsPageProps, SettingsPageChildren> {
         id: "email",
         name: "email",
         label: "email",
-        // placeholder: props?.user?.email || "",
         value: props?.user?.email || "",
       }),
       InputLogin: new InputBlock({
@@ -52,7 +50,6 @@ class SettingsPage extends Block<SettingsPageProps, SettingsPageChildren> {
         label_for: "login",
         label: "Логин",
         label_text: "Логин",
-        // placeholder: "",
         value: props.user?.login || "", // Установка начального значения
       }),
       InputFirstName: new InputBlock({
@@ -62,7 +59,6 @@ class SettingsPage extends Block<SettingsPageProps, SettingsPageChildren> {
         type: "text",
         id: "first_name",
         name: "first_name",
-        // placeholder: "",
         value: props.user?.first_name || "", // Установка начального значения
       }),
       InputSecondName: new InputBlock({
@@ -72,7 +68,6 @@ class SettingsPage extends Block<SettingsPageProps, SettingsPageChildren> {
         type: "text",
         id: "second_name",
         name: "second_name",
-        // placeholder: "",
         value: props.user?.second_name || "", // Установка начального значения
       }),
       InputDisplayName: new InputBlock({
@@ -82,7 +77,6 @@ class SettingsPage extends Block<SettingsPageProps, SettingsPageChildren> {
         type: "text",
         id: "display_name",
         name: "display_name",
-        // placeholder: "",
         value: props.user?.display_name || "", // Установка начального значения
       }),
       InputPhone: new InputBlock({
@@ -92,7 +86,6 @@ class SettingsPage extends Block<SettingsPageProps, SettingsPageChildren> {
         type: "text",
         id: "phone",
         name: "phone",
-        // placeholder: "",
         value: props.user?.phone || "",
       }),
 
@@ -100,7 +93,7 @@ class SettingsPage extends Block<SettingsPageProps, SettingsPageChildren> {
         button_text: "Изменить данные",
         type: "button",
         events: {
-          click: () => this.handleChangeInfo(),
+          click: (e: Event) => this.handleSubmit(e),
         },
       }),
       ChangeUserPassword: new Button({
@@ -136,6 +129,13 @@ class SettingsPage extends Block<SettingsPageProps, SettingsPageChildren> {
           click: () => this.handleBack(),
         },
       }),
+      ChangeAvatarButton: new Button({
+        type: "button",
+        button_text: "Изменить аватар",
+        events: {
+          click: () => this.changeAvatar(),
+        },
+      }),
       ChangePassword: new ChangePassword({}),
       isPasswordChangeMode: false,
     });
@@ -149,15 +149,12 @@ class SettingsPage extends Block<SettingsPageProps, SettingsPageChildren> {
       this.children.InputEmail,
       this.children.InputLogin,
       this.children.InputPhone,
-      // this.children.InputNewPassword,
-      // this.children.InputOldPassword,
     ];
 
     let areAllValid = true;
     const userData: { [key: string]: string } = {}; // Объект для хранения значений полей
 
     for (const child of childrenToCheck) {
-      // Вызываем handleBlur и сохраняем результат
       child.handleBlur();
 
       const inputElement =
@@ -180,6 +177,10 @@ class SettingsPage extends Block<SettingsPageProps, SettingsPageChildren> {
       return null; // Возвращаем null, если не все поля валидны
     }
   }
+  changeAvatar() {
+    console.log("changeavatar");
+  }
+
   handleBack() {
     console.log("this.props.isPasswordChangeMode");
     this.setProps({ isPasswordChangeMode: false });
@@ -208,18 +209,14 @@ class SettingsPage extends Block<SettingsPageProps, SettingsPageChildren> {
   }
 
   async componentDidMount(): Promise<void> {
-    // console.log("Mounted");
     const authAPI = new AuthApi();
     const Me = await authAPI.me();
-    // Обновляем store с данными пользователя
     if ("data" in Me) {
       window.store.set({ user: Me?.data });
       this.setProps({
         user: Me?.data,
       });
-      // Обновляем значения в InputBlock компонентах
       this.children.InputEmail.children.InputField.setProps({
-        // placeholder: Me?.data?.email,
         value: Me?.data?.email,
       });
       this.children.InputLogin.children.InputField.setProps({
@@ -279,6 +276,7 @@ class SettingsPage extends Block<SettingsPageProps, SettingsPageChildren> {
               <div class="user-edit">
                 {{{ChangeUserInfo}}}
                 {{{ChangeUserPassword}}}
+                {{{ChangeAvatarButton}}}
                 {{{LogoutButton}}}
               </div>
             </div>
@@ -288,11 +286,9 @@ class SettingsPage extends Block<SettingsPageProps, SettingsPageChildren> {
     `;
   }
 }
-// {{{InputOldPassword}}}
-// {{{InputNewPassword}}}
-// Функция для подключения к store
+
 const mapStateToProps = (state: any) => ({
-  user: state.user || {}, // Извлекаем пользователя из состояния
+  user: state.user || {},
 });
 
-export default connect(mapStateToProps)(SettingsPage); // Экспортируем компонент, подключенный к store
+export default connect(mapStateToProps)(SettingsPage);

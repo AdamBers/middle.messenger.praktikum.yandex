@@ -13,4 +13,7 @@ export default class UsersAPI {
   async updateProfile(data: {}): Promise<TResponse> {
     return usersAPI.put<TResponse>("/profile", { data });
   }
+  async changePassword(data: {}): Promise<TResponse> {
+    return usersAPI.put<TResponse>("/password", { data });
+  }
 }

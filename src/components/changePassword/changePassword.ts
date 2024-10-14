@@ -1,5 +1,6 @@
 import Block from "@/core/Block";
 import { Button, InputBlock } from "@/components";
+import UsersAPI from "@/api/user";
 
 type ChangePasswodProps = {};
 
@@ -8,6 +9,8 @@ type ChangePasswordChildren = {
   InputNewPassword: InputBlock;
   ChangePassSubmit: Button;
 };
+
+const usersApi = new UsersAPI();
 class ChangePassword extends Block<ChangePasswodProps, ChangePasswordChildren> {
   constructor(props: ChangePasswodProps) {
     super({
@@ -39,8 +42,25 @@ class ChangePassword extends Block<ChangePasswodProps, ChangePasswordChildren> {
       }),
     });
   }
-  handleChangePass() {
-    console.log("click");
+  async handleChangePass() {
+    let oldPassword;
+    let newPassword;
+    const oldPasswordInput =
+      this.children.InputOldPassword.children.InputField.getContent() as HTMLInputElement;
+    const newPasswordInput =
+      this.children.InputNewPassword.children.InputField.getContent() as HTMLInputElement;
+    if (oldPasswordInput) {
+      oldPassword = oldPasswordInput.value;
+    }
+    if (newPasswordInput) {
+      newPassword = newPasswordInput.value;
+    }
+    // let resp = { oldPassword, newPassword };
+    const resp = await usersApi.changePassword({
+      oldPassword,
+      newPassword,
+    });
+    console.log(resp);
   }
   render(): string {
     console.log("changePassword render");
