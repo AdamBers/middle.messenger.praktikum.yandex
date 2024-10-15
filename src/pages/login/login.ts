@@ -112,7 +112,8 @@ class LoginPage extends Block<LoginPageProps, LoginPageChildren> {
       }
     }
   }
-  componentDidMount(_oldProps: LoginPageProps): void {
+  // componentDidMount(_oldProps: LoginPageProps): void {
+  componentDidMount(): void {
     goToMessagesIfAuthorized();
   }
 

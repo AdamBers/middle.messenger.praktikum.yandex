@@ -1,12 +1,10 @@
 import Block from "@/core/Block";
-// import { InputBlock } from "../input-block";
 import AvatarImage from "./avatarImage";
 import AvatarModal from "./avatarModal";
 import AuthApi from "@/api/auth";
-import avatarImage from "./avatarImage";
 
 type AvatarProps = { isFormOpened: boolean; events: {}; user: {} };
-type AvatarChildren = { AvatarImage: AvatarImage; AvatarModal: AvatarModal };
+type AvatarChildren = { AvatarImage: any; AvatarModal: AvatarModal };
 
 const authApi = new AuthApi();
 class Avatar extends Block<AvatarProps, AvatarChildren> {

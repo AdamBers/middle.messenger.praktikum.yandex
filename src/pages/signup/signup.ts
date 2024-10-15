@@ -132,13 +132,15 @@ class SignupPage extends Block<SignupPageProps, SignupPageChildren> {
     if (areAllValid) {
       try {
         // Используем API для регистрации
-        const loggingOut = await authApi.logout();
-        console.log(loggingOut);
+        await authApi.logout();
+        // console.log(loggingOut);
         const response = await authApi.create(userData);
 
-        if ("id" in response?.data) {
+        if (response && response.data && "id" in response.data) {
           console.log("Успешная регистрация:", response);
           window.router.go("/messenger");
+        } else {
+          console.log("Некорректный ответ от сервера:", response);
         }
       } catch (error) {
         console.log("Ошибка при регистрации:", error);
@@ -148,7 +150,9 @@ class SignupPage extends Block<SignupPageProps, SignupPageChildren> {
     }
   }
 
-  componentDidMount(_oldProps: SignupPageProps): void {
+  componentDidMount(): void {
+    // componentDidMount(_oldProps: SignupPageProps): void {
+    // console.log(_oldProps)
     goToMessagesIfAuthorized();
   }
   render() {

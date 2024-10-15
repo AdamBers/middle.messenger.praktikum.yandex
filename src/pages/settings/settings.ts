@@ -185,10 +185,9 @@ class SettingsPage extends Block<SettingsPageProps, SettingsPageChildren> {
     }
   }
   changeAvatar(e: Event) {
-    const avatar = this.children;
+    // const avatar = this.children;
     e.preventDefault();
     e.stopPropagation;
-    console.log(e);
   }
 
   handleBack() {

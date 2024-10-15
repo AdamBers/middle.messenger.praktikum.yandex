@@ -6,7 +6,7 @@ type AvatarImageChildren = {};
 
 class AvatarImage extends Block<AvatarImageProps, AvatarImageChildren> {
   constructor(props: AvatarImageProps) {
-    super(props);
+    super({ ...props });
   }
 
   render(): string {
