@@ -63,7 +63,6 @@ class ChangePassword extends Block<ChangePasswodProps, ChangePasswordChildren> {
     console.log(resp);
   }
   render(): string {
-    console.log("changePassword render");
     return `<div class="password">
                 {{{InputOldPassword}}}
                 {{{InputNewPassword}}}

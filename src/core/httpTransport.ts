@@ -64,13 +64,17 @@ export class HTTPTransport {
     options: Options = { method: METHOD.GET }
   ): Promise<{ status: number; data: TResponse }> {
     const { method, data } = options;
-    // console.log("Request body:", data ? JSON.stringify(data) : null);
+
+    const isFormData = data instanceof FormData;
+
     const response = await fetch(url, {
       method,
       credentials: "include",
       mode: "cors",
-      headers: { "Content-Type": "application/json" },
-      body: data ? JSON.stringify(data) : null,
+      headers: !isFormData
+        ? { "Content-Type": "application/json" } // Для JSON запроса
+        : undefined, // Без заголовков для FormData
+      body: data ? (isFormData ? data : JSON.stringify(data)) : null,
     });
 
     const isJson = response.headers
@@ -81,7 +85,7 @@ export class HTTPTransport {
 
     return {
       status: response.status,
-      data: resultData as unknown as TResponse,
+      data: resultData as TResponse,
     };
   }
 }

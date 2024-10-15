@@ -10,6 +10,7 @@ type InputElementProps = {
     input?: (event: Event) => void;
     click?: (event: Event) => void;
     blur?: (event: Event) => void;
+    change?: (event: Event) => void;
   };
 };
 type InputElementChildren = {};
@@ -21,7 +22,8 @@ class InputElement extends Block<InputElementProps, InputElementChildren> {
       events: {
         input: props.events?.input,
         blur: props.events?.blur,
-        // click: props.events?.click,
+        click: props.events?.click,
+        change: props.events?.change,
       },
     });
   }

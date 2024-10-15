@@ -20,6 +20,9 @@ type InputBlockProps = {
   label: string;
   className?: string;
   value?: string;
+  events?: {
+    click: (e: Event) => void;
+  };
   // onBlur?: (e: Event) => void;
 };
 

@@ -1,0 +1,60 @@
+.avatar {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid black;
+  background-color: #e2e2e2;
+  margin-bottom: 40px;
+
+  .avatar-modal {
+    width: 100vw;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 100;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    .transparent {
+      opacity: 0.3;
+      background-color: #000;
+      width: 100vw;
+      height: 100vh;
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 100;
+    }
+    .content {
+      width: 600px;
+      height: 350px;
+      background-color: #fff;
+      opacity: 1;
+      z-index: 101;
+      p {
+        margin-bottom: 30px;
+      }
+      button {
+        width: 200px;
+        height: 50px;
+        margin: 50px;
+      }
+      .content {
+        position: relative;
+      }
+      
+      .closeButton button {
+        height: 50px;
+        width: 50px ;
+        position: fixed;
+        right: 10px;
+        top: 20px;
+        border: none;
+      }
+    }
+  }
+}

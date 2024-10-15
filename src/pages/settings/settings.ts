@@ -3,6 +3,7 @@ import AuthApi from "@/api/auth";
 import UsersAPI from "@/api/user";
 import { InputBlock, Button, Link, ChangePassword } from "../../components";
 import { connect } from "@/utils/connect"; // Импортируем функцию connect
+import { Avatar } from "@/components/avatar";
 // import { UserDTO } from "@/api/type"; // Импортируем тип UserDTO
 
 type SettingsPageProps = {
@@ -12,6 +13,7 @@ type SettingsPageProps = {
 };
 
 type SettingsPageChildren = {
+  Avatar: Avatar;
   InputEmail: InputBlock;
   InputLogin: InputBlock;
   InputFirstName: InputBlock;
@@ -130,11 +132,14 @@ class SettingsPage extends Block<SettingsPageProps, SettingsPageChildren> {
         },
       }),
       ChangeAvatarButton: new Button({
-        type: "button",
+        type: "submit",
         button_text: "Изменить аватар",
         events: {
-          click: () => this.changeAvatar(),
+          click: (e: Event) => this.changeAvatar(e),
         },
+      }),
+      Avatar: new Avatar({
+        
       }),
       ChangePassword: new ChangePassword({}),
       isPasswordChangeMode: false,
@@ -177,8 +182,11 @@ class SettingsPage extends Block<SettingsPageProps, SettingsPageChildren> {
       return null; // Возвращаем null, если не все поля валидны
     }
   }
-  changeAvatar() {
-    console.log("changeavatar");
+  changeAvatar(e: Event) {
+    const avatar = this.children;
+    e.preventDefault();
+    e.stopPropagation;
+    console.log(e);
   }
 
   handleBack() {
@@ -254,17 +262,8 @@ class SettingsPage extends Block<SettingsPageProps, SettingsPageChildren> {
           {{{BackHomeLink}}}
         </div>
         <div class="content user-settings">
-          <form>
-            <label for="avatar">
-              {{#if avatar}}
-                {{!-- <img class="profile__avatar" src="{{ avatar }}" alt="avatar" /> --}}
-              {{else }}
-                <div class="profile__avatar-empty">
-                  {{!-- <img class="profile__avatar" src="/static/img/empty-profile.png" alt="avatar" /> --}}
-                </div>
-              {{/if}}
-            </label>
-            <input type="file" id="avatar" name="avatar" accept="image/png, image/jpeg" class="avatar_input">
+        {{{Avatar}}}
+          <form class="change-info">
             <div class="user-name">{{this.props.userName}}</div>
             <div class="user-settings">
               {{{InputFirstName}}}
@@ -276,7 +275,6 @@ class SettingsPage extends Block<SettingsPageProps, SettingsPageChildren> {
               <div class="user-edit">
                 {{{ChangeUserInfo}}}
                 {{{ChangeUserPassword}}}
-                {{{ChangeAvatarButton}}}
                 {{{LogoutButton}}}
               </div>
             </div>

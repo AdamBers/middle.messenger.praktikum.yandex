@@ -16,4 +16,10 @@ export default class UsersAPI {
   async changePassword(data: {}): Promise<TResponse> {
     return usersAPI.put<TResponse>("/password", { data });
   }
+
+  async changeAvatar(data: FormData): Promise<TResponse> {
+    return usersAPI.put<TResponse>("/profile/avatar", {
+      data,
+    });
+  }
 }
