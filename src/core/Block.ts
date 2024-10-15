@@ -99,9 +99,8 @@ export default class Block<
     });
   }
 
-  componentDidMount() {
-  // componentDidMount(_oldProps: Props) {
-    // console.log(_oldProps);
+  componentDidMount(_oldProps: Props) {
+    console.log(_oldProps);
   }
   // componentDidMount() {}
 
@@ -117,9 +116,8 @@ export default class Block<
     this._render();
   }
 
-  componentDidUpdate() {
-  // componentDidUpdate(_oldProps: Props, _newProps: Props) {
-    // console.log(_oldProps, _newProps);
+  componentDidUpdate(_oldProps: Props, _newProps: Props) {
+    console.log(_oldProps, _newProps);
     return true;
   }
   // componentDidUpdate() {
