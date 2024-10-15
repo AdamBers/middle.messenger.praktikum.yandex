@@ -139,7 +139,9 @@ class SettingsPage extends Block<SettingsPageProps, SettingsPageChildren> {
         },
       }),
       Avatar: new Avatar({
-        
+        user: {},
+        isFormOpened: false,
+        events: {},
       }),
       ChangePassword: new ChangePassword({}),
       isPasswordChangeMode: false,
