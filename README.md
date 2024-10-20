@@ -18,6 +18,8 @@
    `npm run preview`
 7. Для запуска в режиме production используйте команду:
    `npm run start`
+8. Для запуска тестов используйте команду 
+   `npm run test`
 
 Макеты figma данного проекта можно просмотреть по следующей ссылке:
 `https://www.figma.com/design/n5JSpKMihIrRYiPZJmx7sB/YandexChatAdam?node-id=0-1&m=dev&t=fO8MKBg7PGTxT33B-1`
@@ -34,7 +36,7 @@
 Реализована регистрация, авторизация пользователей.
 Для работы с real-time сообщениями используется WebSocket.
 
-Ссылка на проект в Netlify 3-го спринта:
+Ссылка на проект в Netlify 4-го спринта:
 "https://middle-messenger-praktikum-yandex-adm.netlify.app/"
 
 Если у вас есть вопросы, свяжитесь с нами по адресу - adambers2020@gmail.com
