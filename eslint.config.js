@@ -7,9 +7,22 @@ export default [
   {
     // Отключаем ESLint для конфигурационных файлов через .eslintignore
     files: ["**/*.{js,mjs,cjs,ts}"],
-    ignores: ["eslint.config.js", "stylelint.config.js"], // Игнорирование файлов
+    ignores: [
+      "eslint.config.js",
+      "stylelint.config.js",
+      "loader-css.js",
+      "mochaSetup.js",
+    ],
+
     languageOptions: {
-      globals: globals.browser,
+      globals: {
+        ...globals.browser, // Стандартные глобальные переменные браузера
+        describe: "readonly",
+        it: "readonly",
+        beforeEach: "readonly",
+        afterEach: "readonly",
+        global: "readonly",
+      },
       parser: tsParser,
       parserOptions: {
         project: "./tsconfig.json",

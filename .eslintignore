@@ -4,3 +4,5 @@
 eslint.config.js
 stylelint.config.js
 types/declarations.d.ts
+loader-css.js
+mochaSetup.js
