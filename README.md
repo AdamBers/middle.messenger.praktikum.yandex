@@ -39,4 +39,4 @@
 Ссылка на проект в Netlify 4-го спринта:
 "https://middle-messenger-praktikum-yandex-adm.netlify.app/"
 
-Если у вас есть вопросы, свяжитесь с нами по адресу - adambers2020@gmail.com
+Если у вас есть вопросы, свяжитесь с нами по адресу  - adambers2020@gmail.com
