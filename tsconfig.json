@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "typeRoots": ["./node_modules/@types", "./types"],
     "rootDir": "./src",
     "outDir": "./dist",
     "noEmit": false,
@@ -23,6 +24,11 @@
     "sourceMap": true,
     "strictNullChecks": true,
     "noFallthroughCasesInSwitch": true
+  },
+  "ts-node": {
+    "esm": true,
+    "experimentalSpecifierResolution": "node",
+    "transpileOnly": true
   },
   "include": ["src", "src/server.ts"],
   "exclude": ["node_modules"]

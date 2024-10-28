@@ -35,12 +35,6 @@ class Route {
     }
   }
 
-  // leave(): void {
-  //   if (this._block) {
-  //     this._block.hide();
-  //   }
-  // }
-
   leave(): void {
     if (this._block) {
       this._block.hide();
@@ -48,7 +42,7 @@ class Route {
       if (root) {
         root.removeChild(this._block.getContent());
       }
-      this._block = null; // Сбрасываем ссылку на блок
+      this._block = null;
     }
   }
 
@@ -63,22 +57,6 @@ class Route {
     }
   }
 
-  // render(): void {
-  //   if (!this._block) {
-  //     this._block = new this._blockClass({});
-  //     const content = this._block.getContent() as HTMLElement;
-
-  //     if (!content) {
-  //       console.error("Block content is null");
-  //       return;
-  //     }
-
-  //     this._renderDom(this._props.rootQuery, this._block);
-  //     return;
-  //   }
-
-  //   this._block.show();
-  // }
   render(): void {
     if (!this._block) {
       this._block = new this._blockClass({});

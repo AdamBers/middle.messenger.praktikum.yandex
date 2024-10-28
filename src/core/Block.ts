@@ -1,7 +1,8 @@
 import EventBus from "./EventBus";
 import { nanoid } from "nanoid";
-import * as Handlebars from "handlebars";
-//
+// import * as Handlebars from "handlebars";
+import Handlebars from "handlebars";
+
 type Values<T extends Record<string, unknown>> = T[keyof T];
 type TEvents = Values<typeof Block.EVENTS>;
 type ComponentChildren = {

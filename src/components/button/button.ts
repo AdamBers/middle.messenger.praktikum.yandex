@@ -1,4 +1,4 @@
-import Block from "@/core/Block";
+import Block from "../../core/Block";
 
 type ButtonProps = {
   button_text?: string;
