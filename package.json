@@ -14,7 +14,8 @@
     "lint:styles": "stylelint '**/*.{css,scss}'",
     "lintstyles:fix": "stylelint '**/*.{css,scss}' --fix",
     "test": "mocha",
-    "precommit": "npm run lint && npm run lint:styles && npm run check && npm run test"
+    "precommit": "npm run lint && npm run lint:styles && npm run check && npm run test",
+    "postinstall": "npx husky install && cp .husky/pre-commit .git/hooks/pre-commit"
   },
   "devDependencies": {
     "@eslint/js": "^9.9.1",
